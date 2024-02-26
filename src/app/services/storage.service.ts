@@ -52,4 +52,9 @@ export class StorageService {
   public deleteCurrentUser() {
     window.sessionStorage.removeItem(USER_KEY);
   }
+
+  public cleanUserData(): void {
+    this.deleteJwt();
+    this.deleteCurrentUser();
+  }
 }

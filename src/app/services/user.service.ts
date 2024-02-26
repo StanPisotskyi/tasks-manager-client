@@ -23,6 +23,6 @@ export class UserService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
     };
 
-    return this.http.get<User>(environment.apiUrl + '/profile/me', httpOptions);
+    return this.http.get<User>(`${environment.apiUrl}/profile/me`, httpOptions);
   }
 }
