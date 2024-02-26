@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import { AuthService } from '../services/auth.service';
-import { UserService } from '../services/user.service'
 import {StorageService} from "../services/storage.service";
-import {Observable} from "rxjs";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'login',
@@ -21,8 +20,8 @@ export class LoginComponent {
   constructor(private fb:FormBuilder,
               private authService: AuthService,
               private router: Router,
-              private userService: UserService,
-              private storage: StorageService) {
+              private storage: StorageService,
+              private userService: UserService) {
 
     this.form = this.fb.group({
       username: ['',Validators.required],
@@ -31,15 +30,7 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    let observable: Observable<any>|null = this.userService.getUser();
-
-    if (observable !== null) {
-      observable.subscribe((response) => {
-        if (response.hasOwnProperty('username')) {
-          this.router.navigate(['/profile']);
-        }
-      });
-    }
+    console.log('Login component ngOnInit');
   }
 
   login() {
@@ -50,7 +41,11 @@ export class LoginComponent {
         .subscribe(
           (response) => {
             this.storage.saveJwt(response.token);
-            this.router.navigate(['/profile']);
+            this.userService.getCurrentUser()
+              ?.subscribe((user) => {
+                this.storage.saveCurrentUser(user);
+                this.router.navigate(['/profile']);
+              });
           }
         );
     }
