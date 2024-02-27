@@ -7,19 +7,25 @@ import {UserService} from "../services/user.service";
 import {LoginStateService} from "../helpers/login-state.service";
 import {FlashModule} from "simple-flash-message";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    FlashModule
+    FlashModule,
+    NgClass
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
   form: FormGroup;
+  validInputClass: string = 'form-control';
+  invalidInputClass: string = 'form-control is-invalid';
+  usernameIsInvalid: boolean = false;
+  passwordIsInvalid: boolean = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -36,12 +42,19 @@ export class LoginComponent {
   }
 
   login() {
+    for (let field in this.form.controls) {
+      this.form.controls[field].setErrors(null);
+    }
+
+    this.usernameIsInvalid = false;
+    this.passwordIsInvalid = false;
+
     const form = this.form.value;
 
     if (form.username && form.password) {
       this.authService.login(form.username, form.password)
         .subscribe({
-            next: (response) => {
+            next: response => {
               this.storage.saveJwt(response.token);
               this.userService.getCurrentUser()
                 ?.subscribe(user => {
@@ -50,9 +63,17 @@ export class LoginComponent {
                   this.router.navigate(['/profile']);
                 });
             },
-            error: error => {
-              if (error.status === 400) {
-                console.log(error);
+            error: response => {
+              if (response.status === 400) {
+                const errors = response.error.errors;
+                for (let field in errors) {
+                  if (field === 'username') {
+                    this.usernameIsInvalid = true;
+                  } else if (field === 'password') {
+                    this.passwordIsInvalid = true;
+                  }
+                  this.form.controls[field].setErrors({invalid: errors[field]});
+                }
               } else {
                 this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
               }
