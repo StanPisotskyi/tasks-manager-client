@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import { AuthService } from '../services/auth.service';
 import {StorageService} from "../services/storage.service";
 import {UserService} from "../services/user.service";
+import {LoginStateService} from "../helpers/login-state.service";
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
               private authService: AuthService,
               private router: Router,
               private storage: StorageService,
-              private userService: UserService) {
+              private userService: UserService,
+              private loginState: LoginStateService) {
 
     this.form = this.fb.group({
       username: ['',Validators.required],
@@ -44,6 +46,7 @@ export class LoginComponent {
             this.userService.getCurrentUser()
               ?.subscribe((user) => {
                 this.storage.saveCurrentUser(user);
+                this.loginState.setData(true);
                 this.router.navigate(['/profile']);
               });
           }
