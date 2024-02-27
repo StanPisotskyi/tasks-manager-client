@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { AuthService } from '../services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {StorageService} from "../services/storage.service";
 import {UserService} from "../services/user.service";
 import {LoginStateService} from "../helpers/login-state.service";
@@ -19,9 +19,9 @@ import {FlashMessagesService} from "../helpers/flash-messages.service";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  form:FormGroup;
+  form: FormGroup;
 
-  constructor(private fb:FormBuilder,
+  constructor(private fb: FormBuilder,
               private authService: AuthService,
               private router: Router,
               private storage: StorageService,
@@ -30,8 +30,8 @@ export class LoginComponent {
               private flashMessagesService: FlashMessagesService) {
 
     this.form = this.fb.group({
-      username: ['',Validators.required],
-      password: ['',Validators.required]
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
@@ -40,20 +40,22 @@ export class LoginComponent {
 
     if (form.username && form.password) {
       this.authService.login(form.username, form.password)
-        .subscribe(
-          response => {
-            this.storage.saveJwt(response.token);
-            this.userService.getCurrentUser()
-              ?.subscribe(user => {
-                this.storage.saveCurrentUser(user);
-                this.loginState.setData(true);
-                this.router.navigate(['/profile']);
-              });
-          }, error => {
-            if (error.status === 400) {
-              console.log(error);
-            } else {
-              this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+        .subscribe({
+            next: (response) => {
+              this.storage.saveJwt(response.token);
+              this.userService.getCurrentUser()
+                ?.subscribe(user => {
+                  this.storage.saveCurrentUser(user);
+                  this.loginState.setData(true);
+                  this.router.navigate(['/profile']);
+                });
+            },
+            error: error => {
+              if (error.status === 400) {
+                console.log(error);
+              } else {
+                this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+              }
             }
           }
         );
