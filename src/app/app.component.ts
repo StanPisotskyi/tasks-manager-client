@@ -24,8 +24,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    console.log('App component ngOnInit');
-
     this.loginState.setData(false);
     let observable: Observable<User>|null = this.userService.getCurrentUser();
 

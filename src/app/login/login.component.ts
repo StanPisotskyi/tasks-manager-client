@@ -31,10 +31,6 @@ export class LoginComponent {
     });
   }
 
-  ngOnInit() {
-    console.log('Login component ngOnInit');
-  }
-
   login() {
     const form = this.form.value;
 

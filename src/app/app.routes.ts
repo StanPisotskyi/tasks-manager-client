@@ -5,8 +5,6 @@ import {StorageService} from "./services/storage.service";
 import {inject} from "@angular/core";
 
 const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
-  console.log('isUser check');
-
   const storage: StorageService = inject(StorageService);
   const router = inject(Router);
 
@@ -22,8 +20,6 @@ const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
 };
 
 const isGuest: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
-  console.log('isGuest check');
-
   const storage: StorageService = inject(StorageService);
   const router = inject(Router);
 
