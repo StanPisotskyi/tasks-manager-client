@@ -6,7 +6,7 @@ import {StorageService} from "../services/storage.service";
 import {UserService} from "../services/user.service";
 
 @Component({
-  selector: 'login',
+  selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule
