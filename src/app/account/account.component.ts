@@ -18,7 +18,7 @@ export class AccountComponent {
   showInfo: boolean = true;
   classHidden: string = 'hidden';
 
-  hideInfo(showInfo: boolean) {
+  setShowInfo(showInfo: boolean) {
     this.showInfo = showInfo;
   }
 }
