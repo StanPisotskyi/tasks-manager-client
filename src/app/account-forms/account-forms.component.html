@@ -1,0 +1,43 @@
+<div class="container mt-3">
+  <div class="row">
+
+    <div class="col-6 right-border">
+      <form [formGroup]="personalDataForm">
+        <div class="mb-3">
+          <label class="form-label">First name:</label>
+          <input name="firstName" class="form-control" formControlName="firstName" autocomplete="new-firstName">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Last name:</label>
+          <input name="lastName" class="form-control" formControlName="lastName" autocomplete="new-username">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Username:</label>
+          <input name="username" class="form-control" formControlName="username" autocomplete="new-username">
+        </div>
+
+        <button class="btn btn-primary" (click)="savePersonalData()">Save</button>
+      </form>
+    </div>
+
+    <div class="col-6">
+      <form [formGroup]="passwordForm">
+        <div class="mb-3">
+          <label class="form-label">Password:</label>
+          <input name="password" class="form-control" formControlName="password" type="password">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Confirm password:</label>
+          <input name="confirm" class="form-control" formControlName="confirm" type="password">
+        </div>
+
+        <button class="btn btn-primary" (click)="savePassword()">Save</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+<app-flash></app-flash>

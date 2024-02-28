@@ -1,1 +1,6 @@
-<p>account works!</p>
+<div [ngClass]="showInfo ? '' : classHidden">
+  <app-account-info (hideInfoBlock)="hideInfo($event)"></app-account-info>
+</div>
+<div [ngClass]="!showInfo ? '' : classHidden">
+  <app-account-forms></app-account-forms>
+</div>

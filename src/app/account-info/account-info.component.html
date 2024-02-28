@@ -1,0 +1,29 @@
+<div class="row justify-content-md-center">
+  <div class="col-4">
+    <table class="table table-borderless">
+      <tbody>
+      <tr>
+        <td class="w-25">ID:</td>
+        <td>{{user?.id}}</td>
+      </tr>
+      <tr>
+        <td class="w-25">First name:</td>
+        <td>{{user?.firstName}}</td>
+      </tr>
+      <tr>
+        <td class="w-25">Last name:</td>
+        <td>{{user?.lastName}}</td>
+      </tr>
+      <tr>
+        <td class="w-25">Username:</td>
+        <td>{{user?.username}}</td>
+      </tr>
+      <tr>
+        <td class="w-25">Role:</td>
+        <td>{{user?.role}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-primary" (click)="showForms()">Edit</button>
+  </div>
+</div>
