@@ -1,12 +1,12 @@
 <ul class="nav nav-tabs" id="profileTab" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="true">Tasks</button>
+    <button (click)="selectTab('tasks')" [ngClass]="activeTab === 'tasks' ? activeNavLinkClass : navLinkClass" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="true">Tasks</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="false">Account</button>
+    <button (click)="selectTab('account')" [ngClass]="activeTab === 'account' ? activeNavLinkClass : navLinkClass" id="account-tab" data-bs-toggle="tab" data-bs-target="#account" type="button" role="tab" aria-controls="account" aria-selected="false">Account</button>
   </li>
 </ul>
 <div class="tab-content" id="profileContent">
-  <div class="tab-pane fade show active" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">tasks</div>
-  <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab"><app-account></app-account></div>
+  <div [ngClass]="activeTab === 'tasks' ? activeTabPanelClass : tabPanelClass" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">tasks</div>
+  <div [ngClass]="activeTab === 'account' ? activeTabPanelClass : tabPanelClass" id="account" role="tabpanel" aria-labelledby="account-tab"><app-account></app-account></div>
 </div>
