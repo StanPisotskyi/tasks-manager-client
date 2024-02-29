@@ -1,6 +1,7 @@
 <div [ngClass]="showInfo ? '' : classHidden">
-  <app-account-info (hideInfoBlock)="setShowInfo($event)"></app-account-info>
+  <app-account-info (hideInfoBlock)="onShowInfo($event)"></app-account-info>
 </div>
 <div [ngClass]="!showInfo ? '' : classHidden">
-  <app-account-forms (showInfoBlock)="setShowInfo($event)"></app-account-forms>
+  <app-account-forms (showInfoBlock)="onShowInfo($event)" (passwordIsChanged)="onPasswordChanged($event)"></app-account-forms>
 </div>
+<app-flash></app-flash>

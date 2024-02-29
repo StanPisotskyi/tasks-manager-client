@@ -22,6 +22,7 @@ export class AccountFormsComponent {
   passwordForm: FormGroup;
 
   @Output() showInfoBlock = new EventEmitter<boolean>();
+  @Output() passwordIsChanged = new EventEmitter<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -67,7 +68,7 @@ export class AccountFormsComponent {
     if (form.password && form.confirm) {
       this.userService.updatePassword(form.password, form.confirm)?.subscribe({
         next: response => {
-          this.showInfoBlock.emit(true);
+          this.passwordIsChanged.emit(true);
         },
         error: error => {
           this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
