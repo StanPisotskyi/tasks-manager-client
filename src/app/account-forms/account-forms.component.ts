@@ -73,7 +73,7 @@ export class AccountFormsComponent {
                 this.personalDataForm.controls[field].setErrors({invalid: errors[field]});
               }
             } else {
-              this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+              this.flashMessagesService.showMessage('Something went wrong...');
             }
           }
         }
@@ -87,10 +87,11 @@ export class AccountFormsComponent {
     if (form.password && form.confirm) {
       this.userService.updatePassword(form.password, form.confirm)?.subscribe({
         next: response => {
+          this.passwordForm.reset();
           this.passwordIsChanged.emit(true);
         },
         error: error => {
-          this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+          this.flashMessagesService.showMessage('Something went wrong...');
         }
       });
     }

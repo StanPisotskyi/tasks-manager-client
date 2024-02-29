@@ -63,7 +63,7 @@ export class LoginComponent {
                   this.form.controls[field].setErrors({invalid: errors[field]});
                 }
               } else {
-                this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+                this.flashMessagesService.showMessage('Something went wrong...');
               }
             }
           }

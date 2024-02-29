@@ -10,6 +10,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
-    importProvidersFrom(NgbModule), provideAnimationsAsync(), provideAnimationsAsync()
+    importProvidersFrom(NgbModule),
+    provideAnimationsAsync()
   ]
 };
