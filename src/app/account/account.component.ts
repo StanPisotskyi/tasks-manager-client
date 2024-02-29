@@ -36,4 +36,10 @@ export class AccountComponent {
     this.showInfo = isChanged;
     this.flashMessagesService.showSuccessMessage('Success!', 'Password has been changed.');
   }
+
+  onUSerUpdated(user: User) {
+    this.showInfo = true;
+    this.currentUser = user;
+    this.flashMessagesService.showSuccessMessage('Success!', 'Personal data have been changed.');
+  }
 }

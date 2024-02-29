@@ -23,6 +23,7 @@ export class AccountFormsComponent {
 
   @Output() showInfoBlock = new EventEmitter<boolean>();
   @Output() passwordIsChanged = new EventEmitter<boolean>();
+  @Output() updatedUser = new EventEmitter<User>();
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +56,7 @@ export class AccountFormsComponent {
             this.userService.getCurrentUser()
               ?.subscribe(user => {
                 this.storage.saveCurrentUser(user);
+                this.updatedUser.emit(user);
               });
           }
         }
