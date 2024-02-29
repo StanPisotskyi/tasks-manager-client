@@ -4,7 +4,6 @@ import {FlashModule} from "simple-flash-message";
 import {StorageService} from "../services/storage.service";
 import {User} from "../interfaces/user";
 import {UserService} from "../services/user.service";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
 
 @Component({
@@ -45,7 +44,21 @@ export class AccountFormsComponent {
   }
 
   savePersonalData() {
+    const form = this.personalDataForm.value;
 
+    if (form.firstName && form.lastName && form.username) {
+      this.userService.updateUser(form.firstName, form.lastName, form.username)?.subscribe(
+        {
+          next: response => {
+            this.storage.saveJwt(response.token);
+            this.userService.getCurrentUser()
+              ?.subscribe(user => {
+                this.storage.saveCurrentUser(user);
+              });
+          }
+        }
+      );
+    }
   }
 
   savePassword() {
@@ -61,5 +74,9 @@ export class AccountFormsComponent {
         }
       });
     }
+  }
+
+  showInfo() {
+    this.showInfoBlock.emit(true);
   }
 }

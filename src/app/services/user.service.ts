@@ -13,7 +13,6 @@ import {Login} from "../interfaces/login";
 export class UserService {
   constructor(private storage: StorageService, private http: HttpClient) { }
 
-  // @ts-ignore
   public getCurrentUser(): Observable<User>|null {
     const jwt = this.storage.getJwt();
 
@@ -44,6 +43,28 @@ export class UserService {
       {
         password,
         confirm
+      },
+      httpOptions
+    );
+  }
+
+  public updateUser(firstName: string, lastName: string, username: string): Observable<Login>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.put<Login>(
+      `${environment.apiUrl}/profile/me`,
+      {
+        firstName,
+        lastName,
+        username
       },
       httpOptions
     );
