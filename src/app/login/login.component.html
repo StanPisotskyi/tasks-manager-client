@@ -3,7 +3,7 @@
     <form [formGroup]="form">
       <div class="mb-3">
         <label class="form-label">Username:</label>
-        <input name="username" [ngClass]="usernameIsInvalid ? invalidInputClass : validInputClass" formControlName="username" autocomplete="new-username">
+        <input name="username" [ngClass]="form.get('username')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="username" autocomplete="new-username">
         <div class="invalid-feedback">
           {{
             form.get('username')?.hasError('invalid')
@@ -14,7 +14,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Password:</label>
-        <input name="password" [ngClass]="passwordIsInvalid ? invalidInputClass : validInputClass" formControlName="password" type="password" autocomplete="new-password">
+        <input name="password" [ngClass]="form.get('password')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="password" type="password" autocomplete="new-password">
         <div class="invalid-feedback">
           {{
             form.get('password')?.hasError('invalid')

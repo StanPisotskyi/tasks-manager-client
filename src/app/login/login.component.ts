@@ -24,8 +24,6 @@ export class LoginComponent {
   form: FormGroup;
   validInputClass: string = 'form-control';
   invalidInputClass: string = 'form-control is-invalid';
-  usernameIsInvalid: boolean = false;
-  passwordIsInvalid: boolean = false;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,
@@ -46,9 +44,6 @@ export class LoginComponent {
       this.form.controls[field].setErrors(null);
     }
 
-    this.usernameIsInvalid = false;
-    this.passwordIsInvalid = false;
-
     const form = this.form.value;
 
     if (form.username && form.password) {
@@ -67,11 +62,6 @@ export class LoginComponent {
               if (response.status === 400) {
                 const errors = response.error.errors;
                 for (let field in errors) {
-                  if (field === 'username') {
-                    this.usernameIsInvalid = true;
-                  } else if (field === 'password') {
-                    this.passwordIsInvalid = true;
-                  }
                   this.form.controls[field].setErrors({invalid: errors[field]});
                 }
               } else {

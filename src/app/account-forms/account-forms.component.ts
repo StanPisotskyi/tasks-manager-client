@@ -5,6 +5,7 @@ import {StorageService} from "../services/storage.service";
 import {User} from "../interfaces/user";
 import {UserService} from "../services/user.service";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-account-forms',
@@ -12,7 +13,8 @@ import {FlashMessagesService} from "../helpers/flash-messages.service";
   imports: [
     FlashModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgClass
   ],
   templateUrl: './account-forms.component.html',
   styleUrl: './account-forms.component.css'
@@ -20,6 +22,9 @@ import {FlashMessagesService} from "../helpers/flash-messages.service";
 export class AccountFormsComponent {
   personalDataForm: FormGroup;
   passwordForm: FormGroup;
+
+  validInputClass: string = 'form-control';
+  invalidInputClass: string = 'form-control is-invalid';
 
   @Output() showInfoBlock = new EventEmitter<boolean>();
   @Output() passwordIsChanged = new EventEmitter<boolean>();
@@ -46,6 +51,10 @@ export class AccountFormsComponent {
   }
 
   savePersonalData() {
+    for (let field in this.personalDataForm.controls) {
+      this.personalDataForm.controls[field].setErrors(null);
+    }
+
     const form = this.personalDataForm.value;
 
     if (form.firstName && form.lastName && form.username) {
@@ -58,6 +67,16 @@ export class AccountFormsComponent {
                 this.storage.saveCurrentUser(user);
                 this.updatedUser.emit(user);
               });
+          },
+          error: response => {
+            if (response.status === 400) {
+              const errors = response.error.errors;
+              for (let field in errors) {
+                this.personalDataForm.controls[field].setErrors({invalid: errors[field]});
+              }
+            } else {
+              this.flashMessagesService.showErrorMessage('Error', 'Something went wrong...');
+            }
           }
         }
       );
