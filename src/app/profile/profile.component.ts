@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import {AccountComponent} from "../account/account.component";
 import {Router, ActivatedRoute} from "@angular/router";
 import {NgClass} from "@angular/common";
+import {TasksWrapperComponent} from "../tasks-wrapper/tasks-wrapper.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     AccountComponent,
-    NgClass
+    NgClass,
+    TasksWrapperComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'

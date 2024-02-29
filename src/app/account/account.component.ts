@@ -3,7 +3,6 @@ import {AccountInfoComponent} from "../account-info/account-info.component";
 import {AccountFormsComponent} from "../account-forms/account-forms.component";
 import {NgClass} from "@angular/common";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
-import {FlashModule} from "simple-flash-message";
 import {StorageService} from "../services/storage.service";
 import {User} from "../interfaces/user";
 
@@ -13,8 +12,7 @@ import {User} from "../interfaces/user";
   imports: [
     AccountInfoComponent,
     AccountFormsComponent,
-    NgClass,
-    FlashModule
+    NgClass
   ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'

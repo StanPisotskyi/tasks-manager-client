@@ -5,7 +5,6 @@ import {AuthService} from '../services/auth.service';
 import {StorageService} from "../services/storage.service";
 import {UserService} from "../services/user.service";
 import {LoginStateService} from "../helpers/login-state.service";
-import {FlashModule} from "simple-flash-message";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
 import {NgClass} from "@angular/common";
 
@@ -14,7 +13,6 @@ import {NgClass} from "@angular/common";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    FlashModule,
     NgClass
   ],
   templateUrl: './login.component.html',

@@ -7,6 +7,6 @@
   </li>
 </ul>
 <div class="tab-content" id="profileContent">
-  <div [ngClass]="activeTab === 'tasks' ? activeTabPanelClass : tabPanelClass" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">tasks</div>
+  <div [ngClass]="activeTab === 'tasks' ? activeTabPanelClass : tabPanelClass" id="tasks" role="tabpanel" aria-labelledby="tasks-tab"><app-tasks-wrapper></app-tasks-wrapper></div>
   <div [ngClass]="activeTab === 'account' ? activeTabPanelClass : tabPanelClass" id="account" role="tabpanel" aria-labelledby="account-tab"><app-account></app-account></div>
 </div>

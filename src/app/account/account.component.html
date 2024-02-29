@@ -4,4 +4,3 @@
 <div [ngClass]="!showInfo ? '' : classHidden">
   <app-account-forms (showInfoBlock)="onShowInfo($event)" (passwordIsChanged)="onPasswordChanged($event)" (updatedUser)="onUSerUpdated($event)"></app-account-forms>
 </div>
-<app-flash></app-flash>

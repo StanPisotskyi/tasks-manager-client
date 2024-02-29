@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {FlashModule} from "simple-flash-message";
 import {StorageService} from "../services/storage.service";
 import {User} from "../interfaces/user";
 import {UserService} from "../services/user.service";
@@ -11,7 +10,6 @@ import {NgClass} from "@angular/common";
   selector: 'app-account-forms',
   standalone: true,
   imports: [
-    FlashModule,
     FormsModule,
     ReactiveFormsModule,
     NgClass
