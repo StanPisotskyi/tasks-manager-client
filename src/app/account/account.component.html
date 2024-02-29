@@ -1,5 +1,5 @@
 <div [ngClass]="showInfo ? '' : classHidden">
-  <app-account-info (hideInfoBlock)="onShowInfo($event)"></app-account-info>
+  <app-account-info (hideInfoBlock)="onShowInfo($event)" [user]="currentUser"></app-account-info>
 </div>
 <div [ngClass]="!showInfo ? '' : classHidden">
   <app-account-forms (showInfoBlock)="onShowInfo($event)" (passwordIsChanged)="onPasswordChanged($event)"></app-account-forms>
