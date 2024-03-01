@@ -1,0 +1,9 @@
+<mat-card *ngFor="let task of tasks;" class="mb-3">
+  <mat-card-header>
+    <mat-card-title>#{{ task.id}}: {{task.title}}[{{task.project.alias}}] | Assigned to: {{task.assignedTo.firstName}} {{task.assignedTo.lastName}}</mat-card-title>
+    <mat-card-subtitle>{{task.formattedDate}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions align="end">
+    <button mat-button>MORE</button>
+  </mat-card-actions>
+</mat-card>
