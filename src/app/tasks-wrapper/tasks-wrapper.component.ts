@@ -8,6 +8,7 @@ import {TasksPaginationComponent} from "../tasks-pagination/tasks-pagination.com
 import {PageEvent} from "@angular/material/paginator";
 import {TasksFiltersComponent} from "../tasks-filters/tasks-filters.component";
 import {Project} from "../interfaces/project";
+import {UrlService} from "../helpers/url.service";
 
 @Component({
   selector: 'app-tasks-wrapper',
@@ -32,15 +33,13 @@ export class TasksWrapperComponent {
     private tasksService: TasksService,
     private dateService: DateService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private urlService: UrlService
   ) {
   }
 
   ngOnInit() {
-    let url: string = this.router.url.replace(/^\//g, '');
-    const preparedUrl: string = url.substring(0, url.indexOf('?'));
-
-    this.url = preparedUrl === '' ? url : preparedUrl;
+    this.url = this.urlService.getCurrentPage();
 
     const limit: string|null = this.route.snapshot.queryParamMap.get('limit');
     const offset: string|null = this.route.snapshot.queryParamMap.get('offset');
@@ -60,10 +59,12 @@ export class TasksWrapperComponent {
 
     if (this.url === 'profile') {
       this.prepareProfileData();
+    } else {
+      this.prepareData();
     }
   }
 
-  prepareProfileData() {
+  private prepareProfileData() {
     this.tasksService.getProfileTasksCount(this.project)?.subscribe(
       {
         next: response => {
@@ -79,6 +80,48 @@ export class TasksWrapperComponent {
 
           for (let i = 0; i < preparedList.length; i++) {
             preparedList[i].formattedDate = this.dateService.format(preparedList[i].createdAt);
+
+            let fullName = 'none';
+            const assignedTo = preparedList[i].assignedTo;
+
+            if (assignedTo !== null) {
+              fullName = assignedTo.firstName + ' ' + assignedTo.lastName;
+            }
+
+            preparedList[i].fullName = fullName;
+          }
+
+          this.tasks = preparedList;
+        }
+      }
+    );
+  }
+
+  private prepareData() {
+    this.tasksService.getTasksCount(this.project)?.subscribe(
+      {
+        next: response => {
+          this.total = response.total;
+        }
+      }
+    );
+
+    this.tasksService.getTasks(this.limit, this.offset, this.project)?.subscribe(
+      {
+        next: tasks => {
+          let preparedList = tasks;
+
+          for (let i = 0; i < preparedList.length; i++) {
+            preparedList[i].formattedDate = this.dateService.format(preparedList[i].createdAt);
+
+            let fullName = 'none';
+            const assignedTo = preparedList[i].assignedTo;
+
+            if (assignedTo !== null) {
+              fullName = assignedTo.firstName + ' ' + assignedTo.lastName;
+            }
+
+            preparedList[i].fullName = fullName;
           }
 
           this.tasks = preparedList;
@@ -104,6 +147,8 @@ export class TasksWrapperComponent {
 
     if (this.url === 'profile') {
       this.prepareProfileData();
+    } else {
+      this.prepareData();
     }
   }
 
@@ -129,6 +174,8 @@ export class TasksWrapperComponent {
 
     if (this.url === 'profile') {
       this.prepareProfileData();
+    } else {
+      this.prepareData();
     }
   }
 }

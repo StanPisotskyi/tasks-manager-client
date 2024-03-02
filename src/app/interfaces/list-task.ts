@@ -7,6 +7,7 @@ export interface ListTask {
   status: string;
   createdAt: string,
   formattedDate: string,
-  assignedTo: User,
-  project: Project
+  assignedTo: User|null,
+  project: Project,
+  fullName: string|null
 }

@@ -34,6 +34,27 @@ export class TasksService {
     return this.http.get<Count>(`${environment.apiUrl}/profile/tasks/count`, httpOptions);
   }
 
+  public getTasksCount(project: number|null): Observable<Count>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    let params = {};
+
+    if (project !== null) {
+      params = { project };
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt }),
+      params: params
+    };
+
+    return this.http.get<Count>(`${environment.apiUrl}/tasks/count`, httpOptions);
+  }
+
   public getProfileTasks(limit: number, page: number, project: number|null): Observable<ListTask[]>|null {
     const jwt = this.storage.getJwt();
 
@@ -51,5 +72,24 @@ export class TasksService {
     };
 
     return this.http.get<ListTask[]>(`${environment.apiUrl}/profile/tasks`, httpOptions);
+  }
+
+  public getTasks(limit: number, page: number, project: number|null): Observable<ListTask[]>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    let params = { limit, page };
+
+    params = Object.assign(params, project === null ? null : { project });
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt }),
+      params: params
+    };
+
+    return this.http.get<ListTask[]>(`${environment.apiUrl}/tasks`, httpOptions);
   }
 }
