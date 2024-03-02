@@ -9,6 +9,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {TasksFiltersComponent} from "../tasks-filters/tasks-filters.component";
 import {Project} from "../interfaces/project";
 import {UrlService} from "../helpers/url.service";
+import {User} from "../interfaces/user";
 
 @Component({
   selector: 'app-tasks-wrapper',
@@ -28,6 +29,8 @@ export class TasksWrapperComponent {
   offset: number = 0;
   url: string = 'profile';
   project: number|null = null;
+  user: number|null = null;
+  showUsersFilter: boolean = false;
 
   constructor(
     private tasksService: TasksService,
@@ -44,6 +47,7 @@ export class TasksWrapperComponent {
     const limit: string|null = this.route.snapshot.queryParamMap.get('limit');
     const offset: string|null = this.route.snapshot.queryParamMap.get('offset');
     const project: string|null = this.route.snapshot.queryParamMap.get('project');
+    const user: string|null = this.route.snapshot.queryParamMap.get('user');
 
     if (limit !== null) {
       this.limit = parseInt(limit);
@@ -57,9 +61,14 @@ export class TasksWrapperComponent {
       this.project = parseInt(project);
     }
 
+    if (user !== null) {
+      this.user = parseInt(user);
+    }
+
     if (this.url === 'profile') {
       this.prepareProfileData();
     } else {
+      this.showUsersFilter = true;
       this.prepareData();
     }
   }
@@ -98,7 +107,7 @@ export class TasksWrapperComponent {
   }
 
   private prepareData() {
-    this.tasksService.getTasksCount(this.project)?.subscribe(
+    this.tasksService.getTasksCount(this.project, this.user)?.subscribe(
       {
         next: response => {
           this.total = response.total;
@@ -106,7 +115,7 @@ export class TasksWrapperComponent {
       }
     );
 
-    this.tasksService.getTasks(this.limit, this.offset, this.project)?.subscribe(
+    this.tasksService.getTasks(this.limit, this.offset, this.project, this.user)?.subscribe(
       {
         next: tasks => {
           let preparedList = tasks;
@@ -162,6 +171,33 @@ export class TasksWrapperComponent {
     this.project = projectId;
 
     const queryParams = { project: this.project };
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      }
+    );
+
+    if (this.url === 'profile') {
+      this.prepareProfileData();
+    } else {
+      this.prepareData();
+    }
+  }
+
+  onUserChanged(user: User|null) {
+    const userId = user ? user.id : null
+
+    if (this.user === userId) {
+      return;
+    }
+
+    this.user = userId;
+
+    const queryParams = { user: this.user };
 
     this.router.navigate(
       [],

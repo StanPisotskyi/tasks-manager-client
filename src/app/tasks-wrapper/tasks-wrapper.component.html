@@ -1,6 +1,9 @@
 <div class="mt-3">
   <app-tasks-filters
     [lastSelectedProjectId]="project"
+    [showUsersFilter]="showUsersFilter"
+    [lastSelectedUserId]="user"
+    (selectedUser)="onUserChanged($event)"
     (selectedProject)="onProjectChanged($event)"></app-tasks-filters>
 </div>
 

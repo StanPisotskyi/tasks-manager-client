@@ -5,8 +5,10 @@ import {Project} from "../interfaces/project";
 import {MatInput} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {map, Observable, startWith} from "rxjs";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {ProjectsService} from "../services/projects.service";
+import {User} from "../interfaces/user";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-tasks-filters',
@@ -19,22 +21,39 @@ import {ProjectsService} from "../services/projects.service";
     ReactiveFormsModule,
     MatLabel,
     MatAutocompleteTrigger,
-    AsyncPipe
+    AsyncPipe,
+    NgIf
   ],
   templateUrl: './tasks-filters.component.html',
   styleUrl: './tasks-filters.component.css'
 })
 export class TasksFiltersComponent {
+  @Input() showUsersFilter: boolean = false;
+
   projects: Project[] = [];
   filteredProjects: Observable<Project[]> = new Observable<Project[]>();
   projectsFilterForm: FormControl<string | Project | null> = new FormControl<string | Project>('');
   @Output() selectedProject = new EventEmitter<Project|null>;
   @Input() lastSelectedProjectId: number|null = null;
 
-  constructor(private projectsService: ProjectsService) {
+  users: User[] = [];
+  filteredUsers: Observable<User[]> = new Observable<User[]>();
+  usersFilterForm: FormControl<string | User | null> = new FormControl<string | User>('');
+  @Output() selectedUser = new EventEmitter<User|null>;
+  @Input() lastSelectedUserId: number|null = null;
+
+  constructor(private projectsService: ProjectsService, private userService: UserService) {
   }
 
   ngOnInit() {
+    this.prepareProjects();
+
+    if (this.showUsersFilter) {
+      this.prepareUsers();
+    }
+  }
+
+  private prepareProjects() {
     this.projectsService.getAll()?.subscribe(
       {
         next: projects => {
@@ -62,6 +81,34 @@ export class TasksFiltersComponent {
     }
   }
 
+  private prepareUsers() {
+    this.userService.getAll()?.subscribe(
+      {
+        next: users => {
+          this.users = users;
+
+          this.filteredUsers = this.usersFilterForm.valueChanges.pipe(
+            startWith(''),
+            map(user => {
+              const title = typeof user === 'string' ? user : (user?.firstName + ' ' + user?.lastName);
+              return title ? this.filterUser(title as string) : this.users.slice();
+            })
+          );
+        }
+      }
+    );
+
+    if (this.lastSelectedUserId !== null) {
+      this.userService.getOneById(this.lastSelectedUserId)?.subscribe(
+        {
+          next: user => {
+            this.usersFilterForm.setValue(user);
+          }
+        }
+      );
+    }
+  }
+
   displayProject(project: Project): string {
     return project && project.title ? project.title : '';
   }
@@ -82,5 +129,30 @@ export class TasksFiltersComponent {
     const filterValue = title.toLowerCase();
 
     return this.projects.filter(option => option.title.toLowerCase().includes(filterValue));
+  }
+
+  displayUser(user: User): string {
+    return user && user.firstName && user.lastName ? (user.firstName + ' ' + user.lastName) : '';
+  }
+
+  onUserChanged(user: User) {
+    this.selectedUser.emit(user);
+  }
+
+  resetUser() {
+    if (this.usersFilterForm.value !== '') {
+      return;
+    }
+
+    this.selectedUser.emit(null);
+  }
+
+  private filterUser(value: string): User[] {
+    const filterValue = value.toLowerCase();
+
+    return this.users.filter(option => {
+      const fullName = option.firstName + ' ' + option.lastName;
+      fullName.toLowerCase().includes(filterValue)
+    });
   }
 }

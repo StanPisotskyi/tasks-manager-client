@@ -69,4 +69,32 @@ export class UserService {
       httpOptions
     );
   }
+
+  public getAll(): Observable<User[]>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.get<User[]>(`${environment.apiUrl}/users`, httpOptions);
+  }
+
+  public getOneById(id: number): Observable<User>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.get<User>(`${environment.apiUrl}/users/${id}`, httpOptions);
+  }
 }

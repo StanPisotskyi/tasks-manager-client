@@ -1,5 +1,6 @@
 <div class="container">
   <div class="row">
+
     <div class="col-6">
       <form class="example-form">
         <mat-form-field>
@@ -15,5 +16,22 @@
         </mat-form-field>
       </form>
     </div>
+
+    <div class="col-6" *ngIf="showUsersFilter">
+      <form class="example-form">
+        <mat-form-field>
+          <mat-label>User</mat-label>
+          <input type="text" matInput [formControl]="usersFilterForm" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser"
+                            (closed)="resetUser()"
+                            (optionSelected)="onUserChanged($event.option.value)">
+            @for (user of filteredUsers | async; track user) {
+              <mat-option [value]="user">{{user.firstName}} {{user.lastName}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </div>
+
   </div>
 </div>
