@@ -4,12 +4,14 @@ import {ListTask} from "../interfaces/list-task";
 import {TasksListComponent} from "../tasks-list/tasks-list.component";
 import {DateService} from "../helpers/date.service";
 import {Router} from "@angular/router";
+import {TasksPaginationComponent} from "../tasks-pagination/tasks-pagination.component";
 
 @Component({
   selector: 'app-tasks-wrapper',
   standalone: true,
   imports: [
-    TasksListComponent
+    TasksListComponent,
+    TasksPaginationComponent
   ],
   templateUrl: './tasks-wrapper.component.html',
   styleUrl: './tasks-wrapper.component.css'
@@ -17,6 +19,8 @@ import {Router} from "@angular/router";
 export class TasksWrapperComponent {
   total: number = 0;
   tasks: ListTask[] = [];
+  limit: number = 10;
+  offset: number = 0;
 
   constructor(private tasksService: TasksService, private dateService: DateService, private router: Router) {
   }
