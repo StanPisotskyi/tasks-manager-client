@@ -3,5 +3,9 @@
 </div>
 
 <div class="mt-3">
-  <app-tasks-pagination [total]="total" [limit]="limit" [offset]="offset"></app-tasks-pagination>
+  <app-tasks-pagination
+    [total]="total"
+    [limit]="limit"
+    [offset]="offset"
+    (paginationData)="onPaginationDataChanged($event)"></app-tasks-pagination>
 </div>

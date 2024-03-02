@@ -27,15 +27,18 @@ export class TasksService {
     return this.http.get<Count>(`${environment.apiUrl}/profile/tasks/count`, httpOptions);
   }
 
-  public getProfileTasks(): Observable<ListTask[]>|null {
+  public getProfileTasks(limit: number, page: number): Observable<ListTask[]>|null {
     const jwt = this.storage.getJwt();
 
     if (jwt === null) {
       return null;
     }
 
+    let params = { limit, page };
+
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt }),
+      params: params
     };
 
     return this.http.get<ListTask[]>(`${environment.apiUrl}/profile/tasks`, httpOptions);

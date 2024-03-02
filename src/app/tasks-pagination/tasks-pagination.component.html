@@ -3,5 +3,6 @@
   [pageSizeOptions]="pageSizeOptions"
   [pageSize]="limit"
   [pageIndex]="offset"
+  (page)="onPaginationDataChanged($event)"
   aria-label="Select page">
 </mat-paginator>
