@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {Project} from "../interfaces/project";
@@ -27,8 +27,9 @@ import {ProjectsService} from "../services/projects.service";
 export class TasksFiltersComponent {
   projects: Project[] = [];
   filteredProjects: Observable<Project[]> = new Observable<Project[]>();
-  projectsFilter: FormControl<string | Project | null> = new FormControl<string | Project>('');
+  projectsFilterForm: FormControl<string | Project | null> = new FormControl<string | Project>('');
   @Output() selectedProject = new EventEmitter<Project|null>;
+  @Input() lastSelectedProjectId: number|null = null;
 
   constructor(private projectsService: ProjectsService) {
   }
@@ -39,16 +40,26 @@ export class TasksFiltersComponent {
         next: projects => {
           this.projects = projects;
 
-          this.filteredProjects = this.projectsFilter.valueChanges.pipe(
+          this.filteredProjects = this.projectsFilterForm.valueChanges.pipe(
             startWith(''),
             map(project => {
               const title = typeof project === 'string' ? project : project?.title;
               return title ? this.filterProject(title as string) : this.projects.slice();
-            }),
+            })
           );
         }
       }
     );
+
+    if (this.lastSelectedProjectId !== null) {
+      this.projectsService.getOneById(this.lastSelectedProjectId)?.subscribe(
+        {
+          next: project => {
+            this.projectsFilterForm.setValue(project);
+          }
+        }
+      );
+    }
   }
 
   displayProject(project: Project): string {
@@ -60,7 +71,7 @@ export class TasksFiltersComponent {
   }
 
   resetProject() {
-    if (this.projectsFilter.value !== '') {
+    if (this.projectsFilterForm.value !== '') {
       return;
     }
 

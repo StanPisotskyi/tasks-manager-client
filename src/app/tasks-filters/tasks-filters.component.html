@@ -4,7 +4,7 @@
       <form class="example-form">
         <mat-form-field class="example-full-width">
           <mat-label>Project</mat-label>
-          <input type="text" matInput [formControl]="projectsFilter" [matAutocomplete]="auto">
+          <input type="text" matInput [formControl]="projectsFilterForm" [matAutocomplete]="auto">
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProject"
                             (closed)="resetProject()"
                             (optionSelected)="onProjectChanged($event.option.value)">

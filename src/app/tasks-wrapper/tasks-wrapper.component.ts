@@ -26,7 +26,6 @@ export class TasksWrapperComponent {
   limit: number = 10;
   offset: number = 0;
   url: string = 'profile';
-  lastSelectedProject: Project|null = null;
   project: number|null = null;
 
   constructor(
@@ -109,12 +108,13 @@ export class TasksWrapperComponent {
   }
 
   onProjectChanged(project: Project|null) {
-    if (this.lastSelectedProject?.id === project?.id) {
+    const projectId = project ? project.id : null
+
+    if (this.project === projectId) {
       return;
     }
 
-    this.lastSelectedProject = project;
-    this.project = project ? project.id : null;
+    this.project = projectId;
 
     const queryParams = { project: this.project };
 

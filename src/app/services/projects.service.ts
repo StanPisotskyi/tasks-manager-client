@@ -25,4 +25,18 @@ export class ProjectsService {
 
     return this.http.get<Project[]>(`${environment.apiUrl}/projects`, httpOptions);
   }
+
+  public getOneById(id: number): Observable<Project>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.get<Project>(`${environment.apiUrl}/projects/${id}`, httpOptions);
+  }
 }

@@ -1,5 +1,7 @@
 <div class="mt-3">
-  <app-tasks-filters (selectedProject)="onProjectChanged($event)"></app-tasks-filters>
+  <app-tasks-filters
+    [lastSelectedProjectId]="project"
+    (selectedProject)="onProjectChanged($event)"></app-tasks-filters>
 </div>
 
 <div class="mt-3">
