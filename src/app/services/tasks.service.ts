@@ -13,21 +13,28 @@ export class TasksService {
 
   constructor(private storage: StorageService, private http: HttpClient) { }
 
-  public getProfileTasksCount(): Observable<Count>|null {
+  public getProfileTasksCount(project: number|null): Observable<Count>|null {
     const jwt = this.storage.getJwt();
 
     if (jwt === null) {
       return null;
     }
 
+    let params = {};
+
+    if (project !== null) {
+      params = { project };
+    }
+
     const httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt }),
+      params: params
     };
 
     return this.http.get<Count>(`${environment.apiUrl}/profile/tasks/count`, httpOptions);
   }
 
-  public getProfileTasks(limit: number, page: number): Observable<ListTask[]>|null {
+  public getProfileTasks(limit: number, page: number, project: number|null): Observable<ListTask[]>|null {
     const jwt = this.storage.getJwt();
 
     if (jwt === null) {
@@ -35,6 +42,8 @@ export class TasksService {
     }
 
     let params = { limit, page };
+
+    params = Object.assign(params, project === null ? null : { project });
 
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt }),

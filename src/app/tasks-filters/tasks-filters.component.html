@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>Project</mat-label>
+          <input type="text" matInput [formControl]="projectsFilter" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProject"
+                            (closed)="resetProject()"
+                            (optionSelected)="onProjectChanged($event.option.value)">
+            @for (project of filteredProjects | async; track project) {
+              <mat-option [value]="project">{{project.title}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+</div>
