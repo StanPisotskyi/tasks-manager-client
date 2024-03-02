@@ -37,7 +37,7 @@ export class ProfileComponent {
       {
         relativeTo: this.route,
         queryParams,
-        queryParamsHandling: 'merge',
+        //queryParamsHandling: 'merge',
       }
     );
   }
