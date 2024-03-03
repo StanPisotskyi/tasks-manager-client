@@ -34,11 +34,17 @@ export class TasksService {
     return this.http.get<Count>(`${environment.apiUrl}/profile/tasks/count`, httpOptions);
   }
 
-  public getTasksCount(project: number|null, user: number|null): Observable<Count>|null {
+  public getTasksCount(project: number|null, user: number|null, statusesList: string[]|null): Observable<Count>|null {
     const jwt = this.storage.getJwt();
 
     if (jwt === null) {
       return null;
+    }
+
+    let statuses: string|null = null;
+
+    if (statusesList !== null && statusesList.length > 0) {
+      statuses = statusesList.join(',');
     }
 
     let params = {};
@@ -46,7 +52,8 @@ export class TasksService {
     params = Object.assign(
       params,
       project === null ? null : { project },
-      user === null ? null : { user }
+      user === null ? null : { user },
+      statuses === null ? null : { statuses }
     );
 
     const httpOptions = {
@@ -76,11 +83,17 @@ export class TasksService {
     return this.http.get<ListTask[]>(`${environment.apiUrl}/profile/tasks`, httpOptions);
   }
 
-  public getTasks(limit: number, page: number, project: number|null, user: number|null): Observable<ListTask[]>|null {
+  public getTasks(limit: number, page: number, project: number|null, user: number|null, statusesList: string[]|null): Observable<ListTask[]>|null {
     const jwt = this.storage.getJwt();
 
     if (jwt === null) {
       return null;
+    }
+
+    let statuses: string|null = null;
+
+    if (statusesList !== null && statusesList.length > 0) {
+      statuses = statusesList.join(',');
     }
 
     let params = { limit, page };
@@ -88,7 +101,8 @@ export class TasksService {
     params = Object.assign(
       params,
       project === null ? null : { project },
-      user === null ? null : { user }
+      user === null ? null : { user },
+      statuses === null ? null : { statuses }
     );
 
     const httpOptions = {

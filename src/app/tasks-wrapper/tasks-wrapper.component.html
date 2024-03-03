@@ -2,7 +2,10 @@
   <app-tasks-filters
     [lastSelectedProjectId]="project"
     [showUsersFilter]="showUsersFilter"
+    [showStatusesFilter]="showStatusesFilter"
     [lastSelectedUserId]="user"
+    [lastSelectedStatuses]="statuses"
+    (selectedStatuses)="onStatusesChanged($event)"
     (selectedUser)="onUserChanged($event)"
     (selectedProject)="onProjectChanged($event)"></app-tasks-filters>
 </div>

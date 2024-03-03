@@ -31,6 +31,8 @@ export class TasksWrapperComponent {
   project: number|null = null;
   user: number|null = null;
   showUsersFilter: boolean = false;
+  showStatusesFilter: boolean = false;
+  statuses: string[]|null = null;
 
   constructor(
     private tasksService: TasksService,
@@ -48,6 +50,7 @@ export class TasksWrapperComponent {
     const offset: string|null = this.route.snapshot.queryParamMap.get('offset');
     const project: string|null = this.route.snapshot.queryParamMap.get('project');
     const user: string|null = this.route.snapshot.queryParamMap.get('user');
+    const statusesParam: string|null = this.route.snapshot.queryParamMap.get('statuses');
 
     if (limit !== null) {
       this.limit = parseInt(limit);
@@ -65,10 +68,15 @@ export class TasksWrapperComponent {
       this.user = parseInt(user);
     }
 
+    if (statusesParam !== null) {
+      this.statuses = statusesParam.split(',').map(status => {return status.toUpperCase()});
+    }
+
     if (this.url === 'profile') {
       this.prepareProfileData();
     } else {
       this.showUsersFilter = true;
+      this.showStatusesFilter = true;
       this.prepareData();
     }
   }
@@ -107,7 +115,7 @@ export class TasksWrapperComponent {
   }
 
   private prepareData() {
-    this.tasksService.getTasksCount(this.project, this.user)?.subscribe(
+    this.tasksService.getTasksCount(this.project, this.user, this.statuses)?.subscribe(
       {
         next: response => {
           this.total = response.total;
@@ -115,7 +123,7 @@ export class TasksWrapperComponent {
       }
     );
 
-    this.tasksService.getTasks(this.limit, this.offset, this.project, this.user)?.subscribe(
+    this.tasksService.getTasks(this.limit, this.offset, this.project, this.user, this.statuses)?.subscribe(
       {
         next: tasks => {
           let preparedList = tasks;
@@ -208,10 +216,29 @@ export class TasksWrapperComponent {
       }
     );
 
-    if (this.url === 'profile') {
-      this.prepareProfileData();
-    } else {
-      this.prepareData();
+    this.prepareData();
+  }
+
+  onStatusesChanged(statuses: string[]|null) {
+    this.statuses = statuses;
+
+    let statusesParam: string|null = null;
+
+    if (statuses !== null && statuses.length > 0) {
+      statusesParam = statuses.map(status => {return status.toLowerCase()}).join(',');
     }
+
+    const queryParams = { statuses: statusesParam };
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+      }
+    );
+
+    this.prepareData();
   }
 }

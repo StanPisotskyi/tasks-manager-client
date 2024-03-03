@@ -9,6 +9,7 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {ProjectsService} from "../services/projects.service";
 import {User} from "../interfaces/user";
 import {UserService} from "../services/user.service";
+import {MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-tasks-filters',
@@ -22,13 +23,15 @@ import {UserService} from "../services/user.service";
     MatLabel,
     MatAutocompleteTrigger,
     AsyncPipe,
-    NgIf
+    NgIf,
+    MatSelect
   ],
   templateUrl: './tasks-filters.component.html',
   styleUrl: './tasks-filters.component.css'
 })
 export class TasksFiltersComponent {
   @Input() showUsersFilter: boolean = false;
+  @Input() showStatusesFilter: boolean = false;
 
   projects: Project[] = [];
   filteredProjects: Observable<Project[]> = new Observable<Project[]>();
@@ -42,6 +45,11 @@ export class TasksFiltersComponent {
   @Output() selectedUser = new EventEmitter<User|null>;
   @Input() lastSelectedUserId: number|null = null;
 
+  statusesFilter: FormControl<string|string[]|null> = new FormControl('');
+  statuses: string[] = ['NEW', 'IN_PROGRESS', 'TESTING', 'CLOSED'];
+  @Output() selectedStatuses = new EventEmitter<string[]|null>;
+  @Input() lastSelectedStatuses: string[]|null = null;
+
   constructor(private projectsService: ProjectsService, private userService: UserService) {
   }
 
@@ -50,6 +58,10 @@ export class TasksFiltersComponent {
 
     if (this.showUsersFilter) {
       this.prepareUsers();
+    }
+
+    if (this.showStatusesFilter && this.lastSelectedStatuses !== null) {
+      this.statusesFilter.setValue(this.lastSelectedStatuses);
     }
   }
 
@@ -145,6 +157,10 @@ export class TasksFiltersComponent {
     }
 
     this.selectedUser.emit(null);
+  }
+
+  onStatusesChanged(statuses: string[]) {
+    this.selectedStatuses.emit(statuses.length > 0 ? statuses : null);
   }
 
   private filterUser(value: string): User[] {
