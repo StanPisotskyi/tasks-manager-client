@@ -127,4 +127,52 @@ export class TasksService {
 
     return this.http.get<Task>(`${environment.apiUrl}/tasks/${id}`, httpOptions);
   }
+
+  public create(title: string, description: string, status: string, projectId: number, assignedToId: number): Observable<Task>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.post<Task>(
+      `${environment.apiUrl}/tasks`,
+      {
+        title,
+        description,
+        status,
+        projectId,
+        assignedToId
+      },
+      httpOptions
+    );
+  }
+
+  public edit(id: number, title: string, description: string, status: string, projectId: number, assignedToId: number): Observable<Task>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.put<Task>(
+      `${environment.apiUrl}/tasks/${id}`,
+      {
+        title,
+        description,
+        status,
+        projectId,
+        assignedToId
+      },
+      httpOptions
+    );
+  }
 }

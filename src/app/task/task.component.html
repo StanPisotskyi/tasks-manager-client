@@ -15,9 +15,7 @@
           <mat-card-title>#{{ task?.id}}: {{task?.title}}[{{task?.project?.alias}}] | Assigned to: {{task?.assignedToFullName}} | Status: {{ task?.status}} | Created by: {{task?.createdByFullName}}</mat-card-title>
           <mat-card-subtitle>Last update: {{task?.formattedDate}}</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
-          {{task?.description}}
-        </mat-card-content>
+        <mat-card-content [innerHTML]="task?.description"></mat-card-content>
       </mat-card>
 
     </div>

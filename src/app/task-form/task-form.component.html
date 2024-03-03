@@ -2,7 +2,6 @@
   <div class="container mb-3">
     <div class="row">
       <div class="col-12">
-
         <label class="form-label">Title:</label>
         <input name="title" [ngClass]="form.get('title')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="title" autocomplete="new-title">
         <div class="invalid-feedback">
@@ -12,7 +11,6 @@
               : ''
           }}
         </div>
-
       </div>
     </div>
   </div>
@@ -20,12 +18,19 @@
   <div class="container mb-3">
     <div class="row">
       <div class="col-12">
+        <label class="form-label">Description:</label>
+        <ckeditor [editor]="ckEditor" formControlName="description"></ckeditor>
+      </div>
+    </div>
+  </div>
 
+  <div class="container mb-3">
+    <div class="row">
+      <div class="col-12">
         <label class="form-label">Status:</label>
         <select class="form-select" name="status" formControlName="status">
           <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
         </select>
-
       </div>
     </div>
   </div>
@@ -33,21 +38,17 @@
   <div class="container mb-3">
     <div class="row">
       <div class="col-6">
-
         <label class="form-label">Project:</label>
-        <select class="form-select" name="project" formControlName="project">
+        <select class="form-select" name="projectId" formControlName="projectId">
           <option *ngFor="let project of projects" value="{{project.id}}">{{project.title}}</option>
         </select>
-
       </div>
 
       <div class="col-6">
-
         <label class="form-label">Assigned to:</label>
-        <select class="form-select" name="assignedTo" formControlName="assignedTo">
+        <select class="form-select" name="assignedTo" formControlName="assignedToId">
           <option *ngFor="let user of users" value="{{user.id}}">{{user.firstName}} {{user.lastName}}</option>
         </select>
-
       </div>
     </div>
   </div>
@@ -55,7 +56,7 @@
   <div class="container mb-3">
     <div class="row">
       <div class="12">
-        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-primary" (click)="save()">Save</button>
       </div>
     </div>
   </div>

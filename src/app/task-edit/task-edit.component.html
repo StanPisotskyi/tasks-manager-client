@@ -7,4 +7,6 @@
     </div>
   </div>
 </div>
-<app-task-form [task]="task"></app-task-form>
+<app-task-form
+  (isSaved)="onFormSaved($event)"
+  [task]="task"></app-task-form>

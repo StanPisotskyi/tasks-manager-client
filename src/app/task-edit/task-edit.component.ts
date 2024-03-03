@@ -4,6 +4,7 @@ import {TasksService} from "../services/tasks.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {MatAnchor} from "@angular/material/button";
 import {TaskFormComponent} from "../task-form/task-form.component";
+import {FlashMessagesService} from "../helpers/flash-messages.service";
 
 @Component({
   selector: 'app-task-edit',
@@ -20,7 +21,7 @@ export class TaskEditComponent {
   id: number = 0;
   task: Task|null = null;
 
-  constructor(private tasksService: TasksService, private route: ActivatedRoute) {
+  constructor(private tasksService: TasksService, private route: ActivatedRoute, private flashMessagesService: FlashMessagesService) {
     const id: string|null = this.route.snapshot.paramMap.get('id');
 
     if (id !== null) {
@@ -36,5 +37,11 @@ export class TaskEditComponent {
         }
       }
     );
+  }
+
+  onFormSaved(isSaved: boolean) {
+    if (isSaved) {
+      this.flashMessagesService.showMessage('Task has been edited!');
+    }
   }
 }
