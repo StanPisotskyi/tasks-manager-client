@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Task} from "../interfaces/task";
 import {TasksService} from "../services/tasks.service";
 import {DateService} from "../helpers/date.service";
 import {User} from "../interfaces/user";
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
+import {MatAnchor} from "@angular/material/button";
 
 @Component({
   selector: 'app-task',
@@ -14,7 +15,9 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} f
     MatCardHeader,
     MatCardContent,
     MatCardSubtitle,
-    MatCardTitle
+    MatCardTitle,
+    MatAnchor,
+    RouterLink
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'

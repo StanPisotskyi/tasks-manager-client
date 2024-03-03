@@ -5,6 +5,8 @@ import {StorageService} from "./services/storage.service";
 import {inject} from "@angular/core";
 import {TasksWrapperComponent} from "./tasks-wrapper/tasks-wrapper.component";
 import {TaskComponent} from "./task/task.component";
+import {TaskCreateComponent} from "./task-create/task-create.component";
+import {TaskEditComponent} from "./task-edit/task-edit.component";
 
 const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
   const storage: StorageService = inject(StorageService);
@@ -40,6 +42,16 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canMatch: [isUser]
+  },
+  {
+    path: 'tasks/create',
+    component: TaskCreateComponent,
+    canMatch: [isUser]
+  },
+  {
+    path: 'tasks/:id/edit',
+    component: TaskEditComponent,
     canMatch: [isUser]
   },
   {

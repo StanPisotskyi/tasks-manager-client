@@ -1,9 +1,25 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>#{{ task?.id}}: {{task?.title}}[{{task?.project?.alias}}] | Assigned to: {{task?.assignedToFullName}} | Status: {{ task?.status}} | Created by: {{task?.createdByFullName}}</mat-card-title>
-    <mat-card-subtitle>Last update: {{task?.formattedDate}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    {{task?.description}}
-  </mat-card-content>
-</mat-card>
+<div class="container mb-3">
+  <div class="row">
+    <div class="col-12">
+      <a mat-raised-button [routerLink]="['/tasks', task?.id, 'edit']">Edit</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>#{{ task?.id}}: {{task?.title}}[{{task?.project?.alias}}] | Assigned to: {{task?.assignedToFullName}} | Status: {{ task?.status}} | Created by: {{task?.createdByFullName}}</mat-card-title>
+          <mat-card-subtitle>Last update: {{task?.formattedDate}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          {{task?.description}}
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+</div>

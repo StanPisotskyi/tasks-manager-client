@@ -3,13 +3,14 @@ import {TasksService} from "../services/tasks.service";
 import {ListTask} from "../interfaces/list-task";
 import {TasksListComponent} from "../tasks-list/tasks-list.component";
 import {DateService} from "../helpers/date.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {TasksPaginationComponent} from "../tasks-pagination/tasks-pagination.component";
 import {PageEvent} from "@angular/material/paginator";
 import {TasksFiltersComponent} from "../tasks-filters/tasks-filters.component";
 import {Project} from "../interfaces/project";
 import {UrlService} from "../helpers/url.service";
 import {User} from "../interfaces/user";
+import {MatAnchor} from "@angular/material/button";
 
 @Component({
   selector: 'app-tasks-wrapper',
@@ -17,7 +18,9 @@ import {User} from "../interfaces/user";
   imports: [
     TasksListComponent,
     TasksPaginationComponent,
-    TasksFiltersComponent
+    TasksFiltersComponent,
+    MatAnchor,
+    RouterLink
   ],
   templateUrl: './tasks-wrapper.component.html',
   styleUrl: './tasks-wrapper.component.css'
