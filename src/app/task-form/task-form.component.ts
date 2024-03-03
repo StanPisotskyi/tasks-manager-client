@@ -11,6 +11,7 @@ import {CKEditorModule} from "@ckeditor/ckeditor5-angular";
 import {Observable} from "rxjs";
 import {TasksService} from "../services/tasks.service";
 import {Router} from "@angular/router";
+import {FlashMessagesService} from "../helpers/flash-messages.service";
 
 @Component({
   selector: 'app-task-form',
@@ -50,7 +51,8 @@ export class TaskFormComponent {
     private projectsService: ProjectsService,
     private userService: UserService,
     private tasksService: TasksService,
-    private router: Router
+    private router: Router,
+    private flashMessagesService: FlashMessagesService
   ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -101,6 +103,10 @@ export class TaskFormComponent {
   }
 
   save() {
+    for (let field in this.form.controls) {
+      this.form.controls[field].setErrors(null);
+    }
+
     const form = this.form.value;
 
     if (form.title && form.description) {
@@ -117,6 +123,16 @@ export class TaskFormComponent {
           next: task => {
             this.isSaved.emit(true);
             this.router.navigate(['/tasks', task.id]);
+          },
+          error: response => {
+            if (response.status === 400) {
+              const errors = response.error.errors;
+              for (let field in errors) {
+                this.form.controls[field].setErrors({invalid: errors[field]});
+              }
+            } else {
+              this.flashMessagesService.showMessage('Something went wrong...');
+            }
           }
         }
       );

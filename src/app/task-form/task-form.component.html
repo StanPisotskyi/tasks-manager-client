@@ -19,7 +19,16 @@
     <div class="row">
       <div class="col-12">
         <label class="form-label">Description:</label>
-        <ckeditor [editor]="ckEditor" formControlName="description"></ckeditor>
+        <ckeditor [editor]="ckEditor"
+                  [ngClass]="form.get('description')?.hasError('invalid') ? invalidInputClass : ''"
+                  formControlName="description"></ckeditor>
+        <div class="invalid-feedback">
+          {{
+            form.get('description')?.hasError('invalid')
+              ? form.get('description')?.getError('invalid')
+              : ''
+          }}
+        </div>
       </div>
     </div>
   </div>
