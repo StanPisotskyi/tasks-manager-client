@@ -4,6 +4,6 @@
     <mat-card-subtitle>{{task.formattedDate}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions align="end">
-    <button mat-button>MORE</button>
+    <a mat-raised-button [routerLink]="['/tasks', task.id]">More</a>
   </mat-card-actions>
 </mat-card>

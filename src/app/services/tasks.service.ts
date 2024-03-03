@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {Count} from "../interfaces/count";
 import {ListTask} from "../interfaces/list-task";
+import {Task} from "../interfaces/task";
 
 @Injectable({
   providedIn: 'root'
@@ -111,5 +112,19 @@ export class TasksService {
     };
 
     return this.http.get<ListTask[]>(`${environment.apiUrl}/tasks`, httpOptions);
+  }
+
+  public getOneById(id: number): Observable<Task>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.get<Task>(`${environment.apiUrl}/tasks/${id}`, httpOptions);
   }
 }
