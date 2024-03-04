@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <a mat-raised-button href="#">Create</a>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-12">
+
+      <table mat-table [dataSource]="projects" class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> # </th>
+          <td mat-cell *matCellDef="let project"> {{project.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef> Title </th>
+          <td mat-cell *matCellDef="let project"> {{project.title}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="alias">
+          <th mat-header-cell *matHeaderCellDef> Alias </th>
+          <td mat-cell *matCellDef="let project"> {{project.alias}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="formattedDate">
+          <th mat-header-cell *matHeaderCellDef> Created at </th>
+          <td mat-cell *matCellDef="let project"> {{project.formattedDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef> Created by </th>
+          <td mat-cell *matCellDef="let project"> {{project.fullName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let project">
+            <a mat-raised-button href="#">Edit</a>
+            <button class="ml-5" mat-raised-button color="warn">Delete</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+    </div>
+  </div>
+</div>

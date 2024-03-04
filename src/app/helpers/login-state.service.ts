@@ -6,10 +6,10 @@ import {Subject} from "rxjs";
 })
 export class LoginStateService {
 
-  private data = new Subject<boolean>();
+  private data = new Subject<string|null>();
   data$ = this.data.asObservable();
 
-  setData(data: boolean) {
-    this.data.next(data);
+  setData(role: string|null) {
+    this.data.next(role);
   }
 }

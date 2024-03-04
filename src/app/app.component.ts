@@ -20,6 +20,7 @@ export class AppComponent {
   activeLinkClass: string = 'nav-link active';
   linkClass: string = 'nav-link';
   currentPage: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -28,13 +29,19 @@ export class AppComponent {
     private loginState: LoginStateService,
     private urlService: UrlService
   ) {
-    this.loginState.data$.subscribe((isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
+    this.loginState.data$.subscribe((role) => {
+      if (role !== null) {
+        this.isLoggedIn = true;
+      }
+
+      if (role === 'ROLE_ADMIN') {
+        this.isAdmin = true;
+      }
     });
   }
 
   ngOnInit() {
-    this.loginState.setData(false);
+    this.loginState.setData(null);
     let observable: Observable<User>|null = this.userService.getCurrentUser();
 
     if (observable === null) {
@@ -44,12 +51,18 @@ export class AppComponent {
 
       observable.subscribe((user) => {
         this.storage.saveCurrentUser(user);
+
+        if (user.role === 'ROLE_ADMIN') {
+          this.isAdmin = true;
+        }
       });
     }
   }
 
   ngDoCheck() {
-    const currentPage = this.urlService.getCurrentPage();
+    const url = this.urlService.getCurrentPage();
+    const segments = url.split('/');
+    const currentPage = segments[0] === 'admin' ? segments[1] : segments[0];
 
     if (this.currentPage === currentPage) {
       return;
@@ -60,6 +73,7 @@ export class AppComponent {
 
   logout() {
     this.isLoggedIn = false;
+    this.isAdmin = false;
     this.storage.cleanUserData();
     this.router.navigate(['/login']);
   }

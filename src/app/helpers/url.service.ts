@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Injectable({
@@ -11,8 +11,6 @@ export class UrlService {
   public getCurrentPage(): string {
     let url: string = this.router.url.replace(/^\//g, '');
     const preparedUrl: string = url.substring(0, url.indexOf('?'));
-    const currentPage = preparedUrl === '' ? url : preparedUrl;
-
-    return currentPage.split('/')[0];
+    return preparedUrl === '' ? url : preparedUrl;
   }
 }

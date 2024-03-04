@@ -52,7 +52,7 @@ export class LoginComponent {
               this.userService.getCurrentUser()
                 ?.subscribe(user => {
                   this.storage.saveCurrentUser(user);
-                  this.loginState.setData(true);
+                  this.loginState.setData(user.role);
                   this.router.navigate(['/profile']);
                 });
             },

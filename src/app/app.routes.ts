@@ -7,6 +7,7 @@ import {TasksWrapperComponent} from "./tasks-wrapper/tasks-wrapper.component";
 import {TaskComponent} from "./task/task.component";
 import {TaskCreateComponent} from "./task-create/task-create.component";
 import {TaskEditComponent} from "./task-edit/task-edit.component";
+import {ProjectsComponent} from "./projects/projects.component";
 
 const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
   const storage: StorageService = inject(StorageService);
@@ -38,6 +39,27 @@ const isGuest: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
   return false;
 };
 
+
+
+const isAdmin: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
+  const storage: StorageService = inject(StorageService);
+  const router = inject(Router);
+
+  const currentUser = storage.getCurrentUser();
+
+  if (currentUser === null) {
+    router.navigate(['/login']);
+    return false;
+  }
+
+  if (currentUser.role === 'ROLE_USER') {
+    router.navigate(['/profile']);
+    return false;
+  }
+
+  return true;
+};
+
 export const routes: Routes = [
   {
     path: 'profile',
@@ -65,9 +87,15 @@ export const routes: Routes = [
     canMatch: [isUser]
   },
   {
+    path: 'admin/projects',
+    component: ProjectsComponent,
+    canMatch: [isAdmin]
+  },
+  {
     path: 'login',
     component: LoginComponent,
     canMatch: [isGuest]
   },
   {path: '', redirectTo: '/profile', pathMatch: 'full'},
+  {path: 'admin', redirectTo: '/admin/projects', pathMatch: 'full'},
 ];

@@ -5,6 +5,8 @@ export interface Project {
   title: string;
   alias: string;
   status: string;
-  createdAt: Date,
-  createdBy: User
+  createdAt: string,
+  createdBy: User,
+  formattedDate: string,
+  fullName: string,
 }
