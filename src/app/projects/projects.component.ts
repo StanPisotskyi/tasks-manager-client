@@ -12,6 +12,7 @@ import {
 } from "@angular/material/table";
 import {DateService} from "../helpers/date.service";
 import {MatAnchor, MatButton} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-projects',
@@ -28,14 +29,15 @@ import {MatAnchor, MatButton} from "@angular/material/button";
     MatHeaderRow,
     MatRow,
     MatAnchor,
-    MatButton
+    MatButton,
+    RouterLink
   ],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent {
   projects: Project[] = [];
-  displayedColumns: string[] = ['id', 'title', 'alias', 'formattedDate', 'createdBy', 'actions'];
+  displayedColumns: string[] = ['id', 'title', 'alias', 'status', 'formattedDate', 'createdBy', 'actions'];
 
   constructor(private projectsService: ProjectsService, private dateService: DateService) {
   }

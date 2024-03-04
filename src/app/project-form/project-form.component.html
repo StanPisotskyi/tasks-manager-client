@@ -1,0 +1,52 @@
+<form [formGroup]="form">
+  <div class="container mb-3">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Title:</label>
+        <input name="title" [ngClass]="form.get('title')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="title" autocomplete="new-title">
+        <div class="invalid-feedback">
+          {{
+            form.get('title')?.hasError('invalid')
+              ? form.get('title')?.getError('invalid')
+              : ''
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-3">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Alias:</label>
+        <input name="alias" [ngClass]="form.get('alias')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="alias" autocomplete="new-alias">
+        <div class="invalid-feedback">
+          {{
+            form.get('alias')?.hasError('invalid')
+              ? form.get('alias')?.getError('invalid')
+              : ''
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-3">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Status:</label>
+        <select class="form-select" name="status" formControlName="status">
+          <option *ngFor="let status of statuses" value="{{status}}">{{status}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-3">
+    <div class="row">
+      <div class="12">
+        <button class="btn btn-primary" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</form>

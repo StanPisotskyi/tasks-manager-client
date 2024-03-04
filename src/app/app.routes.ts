@@ -8,6 +8,8 @@ import {TaskComponent} from "./task/task.component";
 import {TaskCreateComponent} from "./task-create/task-create.component";
 import {TaskEditComponent} from "./task-edit/task-edit.component";
 import {ProjectsComponent} from "./projects/projects.component";
+import {ProjectCreateComponent} from "./project-create/project-create.component";
+import {ProjectEditComponent} from "./project-edit/project-edit.component";
 
 const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
   const storage: StorageService = inject(StorageService);
@@ -85,6 +87,16 @@ export const routes: Routes = [
     path: 'tasks',
     component: TasksWrapperComponent,
     canMatch: [isUser]
+  },
+  {
+    path: 'admin/projects/:id/edit',
+    component: ProjectEditComponent,
+    canMatch: [isAdmin]
+  },
+  {
+    path: 'admin/projects/create',
+    component: ProjectCreateComponent,
+    canMatch: [isAdmin]
   },
   {
     path: 'admin/projects',
