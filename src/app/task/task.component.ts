@@ -5,7 +5,9 @@ import {TasksService} from "../services/tasks.service";
 import {DateService} from "../helpers/date.service";
 import {User} from "../interfaces/user";
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
-import {MatAnchor} from "@angular/material/button";
+import {MatAnchor, MatButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
+import {TaskDeleteModalComponent} from "../task-delete-modal/task-delete-modal.component";
 
 @Component({
   selector: 'app-task',
@@ -17,7 +19,8 @@ import {MatAnchor} from "@angular/material/button";
     MatCardSubtitle,
     MatCardTitle,
     MatAnchor,
-    RouterLink
+    RouterLink,
+    MatButton
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
@@ -26,7 +29,12 @@ export class TaskComponent {
   id: number = 0;
   task: Task|null = null;
 
-  constructor(private route: ActivatedRoute, private tasksService: TasksService, private dateService: DateService) {
+  constructor(
+    private route: ActivatedRoute,
+    private tasksService: TasksService,
+    private dateService: DateService,
+    private dialog: MatDialog
+  ) {
     const id: string|null = this.route.snapshot.paramMap.get('id');
 
     if (id !== null) {
@@ -62,5 +70,12 @@ export class TaskComponent {
         }
       }
     );
+  }
+
+  confirmDelete() {
+    this.dialog.open(TaskDeleteModalComponent, {
+      width: '250px',
+      data: {id: this.task ? this.task.id : 0}
+    });
   }
 }

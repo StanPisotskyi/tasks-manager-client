@@ -6,6 +6,7 @@ import {environment} from "../../environments/environment";
 import {Count} from "../interfaces/count";
 import {ListTask} from "../interfaces/list-task";
 import {Task} from "../interfaces/task";
+import {Default} from "../interfaces/default";
 
 @Injectable({
   providedIn: 'root'
@@ -172,6 +173,23 @@ export class TasksService {
         projectId,
         assignedToId
       },
+      httpOptions
+    );
+  }
+
+  public delete(id: number): Observable<Default>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.delete<Default>(
+      `${environment.apiUrl}/tasks/${id}`,
       httpOptions
     );
   }
