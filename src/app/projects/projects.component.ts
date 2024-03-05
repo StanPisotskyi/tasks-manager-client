@@ -13,6 +13,8 @@ import {
 import {DateService} from "../helpers/date.service";
 import {MatAnchor, MatButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
+import {FlashMessagesService} from "../helpers/flash-messages.service";
+import {ProjectFormStateService} from "../helpers/project-form-state.service";
 
 @Component({
   selector: 'app-projects',
@@ -39,7 +41,27 @@ export class ProjectsComponent {
   projects: Project[] = [];
   displayedColumns: string[] = ['id', 'title', 'alias', 'status', 'formattedDate', 'createdBy', 'actions'];
 
-  constructor(private projectsService: ProjectsService, private dateService: DateService) {
+  constructor(
+    private projectsService: ProjectsService,
+    private dateService: DateService,
+    private flashMessagesService: FlashMessagesService,
+    private projectFormState: ProjectFormStateService
+  ) {
+    this.projectFormState.state$.subscribe(state => {
+      if (state === null) {
+        return;
+      }
+
+      let message: string = '';
+
+      if (state === 'created') {
+        message = 'Project has been created!';
+      } else if (state === 'edited') {
+        message = 'Project has been edited!';
+      }
+
+      this.flashMessagesService.showMessage(message);
+    });
   }
 
   ngOnInit() {

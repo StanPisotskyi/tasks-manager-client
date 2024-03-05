@@ -6,6 +6,7 @@ import {ProjectsService} from "../services/projects.service";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
+import {ProjectFormStateService} from "../helpers/project-form-state.service";
 
 @Component({
   selector: 'app-project-form',
@@ -34,7 +35,8 @@ export class ProjectFormComponent {
     private fb: FormBuilder,
     private projectsService: ProjectsService,
     private router: Router,
-    private flashMessagesService: FlashMessagesService
+    private flashMessagesService: FlashMessagesService,
+    private projectFormState: ProjectFormStateService
   ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -62,16 +64,20 @@ export class ProjectFormComponent {
 
     if (form.title && form.alias) {
       let observable: Observable<Project>|null;
+      let state: string|null;
 
       if (this.project === null) {
         observable = this.create(form.title, form.alias, form.status);
+        state = 'created';
       } else {
-        observable = this.edit(this.project.id, form.title, form.alias, form.status)
+        observable = this.edit(this.project.id, form.title, form.alias, form.status);
+        state = 'edited';
       }
 
       observable?.subscribe(
         {
           next: project => {
+            this.projectFormState.setState(state);
             this.router.navigate(['/admin/projects']);
           },
           error: response => {
