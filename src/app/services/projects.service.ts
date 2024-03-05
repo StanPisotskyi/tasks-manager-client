@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {Project} from "../interfaces/project";
+import {Default} from "../interfaces/default";
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,23 @@ export class ProjectsService {
         alias,
         status
       },
+      httpOptions
+    );
+  }
+
+  public delete(id: number): Observable<Default>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.delete<Default>(
+      `${environment.apiUrl}/projects/${id}`,
       httpOptions
     );
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Project} from "../interfaces/project";
 import {ProjectsService} from "../services/projects.service";
 import {
@@ -6,8 +6,11 @@ import {
   MatCellDef,
   MatColumnDef,
   MatHeaderCell,
-  MatHeaderCellDef, MatHeaderRow,
-  MatHeaderRowDef, MatRow, MatRowDef,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
   MatTable
 } from "@angular/material/table";
 import {DateService} from "../helpers/date.service";
@@ -15,6 +18,9 @@ import {MatAnchor, MatButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
 import {ProjectFormStateService} from "../helpers/project-form-state.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ProjectDeleteModalComponent} from "../project-delete-modal/project-delete-modal.component";
+import {ProjectDeleteStateService} from "../helpers/project-delete-state.service";
 
 @Component({
   selector: 'app-projects',
@@ -40,12 +46,15 @@ import {ProjectFormStateService} from "../helpers/project-form-state.service";
 export class ProjectsComponent {
   projects: Project[] = [];
   displayedColumns: string[] = ['id', 'title', 'alias', 'status', 'formattedDate', 'createdBy', 'actions'];
+  private deletedIds: number[] = [];
 
   constructor(
     private projectsService: ProjectsService,
     private dateService: DateService,
     private flashMessagesService: FlashMessagesService,
-    private projectFormState: ProjectFormStateService
+    private projectFormState: ProjectFormStateService,
+    private dialog: MatDialog,
+    private projectDeleteState: ProjectDeleteStateService
   ) {
     this.projectFormState.state$.subscribe(state => {
       if (state === null) {
@@ -87,5 +96,22 @@ export class ProjectsComponent {
         }
       }
     );
+  }
+
+  ngDoCheck() {
+    this.projectDeleteState.id$.subscribe(id => {
+      if (!this.deletedIds.includes(id)) {
+        this.deletedIds.push(id);
+        this.projects = this.projects.filter(project => project.id !== id);
+        this.flashMessagesService.showMessage('Project has been deleted!');
+      }
+    });
+  }
+
+  confirmDelete(id: number) {
+    this.dialog.open(ProjectDeleteModalComponent, {
+      width: '250px',
+      data: { id }
+    });
   }
 }
