@@ -15,6 +15,9 @@
         <li class="nav-item" *ngIf="isAdmin">
           <a [ngClass]="currentPage === 'projects' ? activeLinkClass : linkClass" href="/admin/projects">Projects</a>
         </li>
+        <li class="nav-item" *ngIf="isAdmin">
+          <a [ngClass]="currentPage === 'users' ? activeLinkClass : linkClass" href="/admin/users">Users</a>
+        </li>
       </ul>
       <span *ngIf="isLoggedIn" (click)="logout()" class="navbar-text pointer">
         Logout
