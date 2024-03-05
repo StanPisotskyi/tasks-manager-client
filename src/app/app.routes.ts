@@ -11,6 +11,8 @@ import {ProjectsComponent} from "./projects/projects.component";
 import {ProjectCreateComponent} from "./project-create/project-create.component";
 import {ProjectEditComponent} from "./project-edit/project-edit.component";
 import {UsersComponent} from "./users/users.component";
+import {UserEditComponent} from "./user-edit/user-edit.component";
+import {UserCreateComponent} from "./user-create/user-create.component";
 
 const isUser: CanMatchFn = (route: Route, segments: UrlSegment[]) => {
   const storage: StorageService = inject(StorageService);
@@ -102,6 +104,16 @@ export const routes: Routes = [
   {
     path: 'admin/projects',
     component: ProjectsComponent,
+    canMatch: [isAdmin]
+  },
+  {
+    path: 'admin/users/:id/edit',
+    component: UserEditComponent,
+    canMatch: [isAdmin]
+  },
+  {
+    path: 'admin/users/create',
+    component: UserCreateComponent,
     canMatch: [isAdmin]
   },
   {

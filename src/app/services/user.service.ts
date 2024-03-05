@@ -97,4 +97,53 @@ export class UserService {
 
     return this.http.get<User>(`${environment.apiUrl}/users/${id}`, httpOptions);
   }
+
+  public create(firstName: string, lastName: string, username: string, email: string, password: string, role: string): Observable<User>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.post<User>(
+      `${environment.apiUrl}/users`,
+      {
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+        role
+      },
+      httpOptions
+    );
+  }
+
+  public updateUserById(id: number, firstName: string, lastName: string, username: string, email: string, role: string): Observable<User>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.put<User>(
+      `${environment.apiUrl}/users/${id}/account`,
+      {
+        firstName,
+        lastName,
+        username,
+        email,
+        role
+      },
+      httpOptions
+    );
+  }
 }

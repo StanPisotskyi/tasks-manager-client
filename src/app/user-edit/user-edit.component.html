@@ -1,0 +1,106 @@
+<div class="mt-3 mb-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <a mat-raised-button [routerLink]="['/admin/users']">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-6">
+      <form [formGroup]="accountForm">
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">First name:</label>
+              <input name="firstName" [ngClass]="accountForm.get('firstName')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="firstName" autocomplete="new-firstName">
+              <div class="invalid-feedback">
+                {{
+                  accountForm.get('firstName')?.hasError('invalid')
+                    ? accountForm.get('firstName')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Last name:</label>
+              <input name="lastName" [ngClass]="accountForm.get('lastName')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="lastName" autocomplete="new-lastName">
+              <div class="invalid-feedback">
+                {{
+                  accountForm.get('lastName')?.hasError('invalid')
+                    ? accountForm.get('lastName')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Username:</label>
+              <input name="username" [ngClass]="accountForm.get('username')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="username" autocomplete="new-username">
+              <div class="invalid-feedback">
+                {{
+                  accountForm.get('username')?.hasError('invalid')
+                    ? accountForm.get('username')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Email:</label>
+              <input name="email" [ngClass]="accountForm.get('email')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="email" autocomplete="new-email" type="email">
+              <div class="invalid-feedback">
+                {{
+                  accountForm.get('email')?.hasError('invalid')
+                    ? accountForm.get('email')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Role:</label>
+              <select class="form-select" name="role" formControlName="role">
+                <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="12">
+              <button class="btn btn-primary" (click)="saveAccount()">Save</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-6">
+
+    </div>
+
+  </div>
+</div>
