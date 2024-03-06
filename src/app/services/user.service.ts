@@ -146,4 +146,27 @@ export class UserService {
       httpOptions
     );
   }
+
+
+
+  public updatePasswordById (id: number, password: string, confirm: string): Observable<Default>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.put<Default>(
+      `${environment.apiUrl}/users/${id}/password`,
+      {
+        password,
+        confirm
+      },
+      httpOptions
+    );
+  }
 }

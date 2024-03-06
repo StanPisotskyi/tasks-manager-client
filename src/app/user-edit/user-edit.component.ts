@@ -22,6 +22,7 @@ import {NgClass, NgForOf} from "@angular/common";
 })
 export class UserEditComponent {
   accountForm: FormGroup;
+  passwordForm: FormGroup;
 
   validInputClass: string = 'form-control';
   invalidInputClass: string = 'form-control is-invalid';
@@ -44,6 +45,11 @@ export class UserEditComponent {
       username: ['', Validators.required],
       email: ['', Validators.required],
       role: ['ROLE_USER', Validators.required],
+    });
+
+    this.passwordForm = this.fb.group({
+      password: ['', Validators.required],
+      confirm: ['', Validators.required],
     });
 
     const id: string|null = this.route.snapshot.paramMap.get('id');
@@ -94,6 +100,35 @@ export class UserEditComponent {
             }
           }
         );
+    }
+  }
+
+  savePassword() {
+    for (let field in this.passwordForm.controls) {
+      this.passwordForm.controls[field].setErrors(null);
+    }
+
+    const form = this.passwordForm.value;
+
+    if (form.password && form.confirm) {
+      this.userService.updatePasswordById(this.id, form.password, form.confirm)?.subscribe(
+        {
+          next: response => {
+            this.userFormState.setState('editedPassword');
+            this.router.navigate(['/admin/users']);
+          },
+          error: response => {
+            if (response.status === 400) {
+              const errors = response.error.errors;
+              for (let field in errors) {
+                this.passwordForm.controls[field].setErrors({invalid: errors[field]});
+              }
+            } else {
+              this.flashMessagesService.showMessage('Something went wrong...');
+            }
+          }
+        }
+      );
     }
   }
 }

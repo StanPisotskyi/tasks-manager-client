@@ -100,6 +100,48 @@
 
     <div class="col-6">
 
+      <form [formGroup]="passwordForm">
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Password:</label>
+              <input name="password" [ngClass]="passwordForm.get('password')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="password" autocomplete="new-password" type="password">
+              <div class="invalid-feedback">
+                {{
+                  passwordForm.get('password')?.hasError('invalid')
+                    ? passwordForm.get('password')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Confirm password:</label>
+              <input name="confirm" [ngClass]="passwordForm.get('confirm')?.hasError('invalid') ? invalidInputClass : validInputClass" formControlName="confirm" autocomplete="new-confirm" type="password">
+              <div class="invalid-feedback">
+                {{
+                  passwordForm.get('confirm')?.hasError('invalid')
+                    ? passwordForm.get('confirm')?.getError('invalid')
+                    : ''
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="12">
+              <button class="btn btn-primary" (click)="savePassword()">Save</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
     </div>
 
   </div>

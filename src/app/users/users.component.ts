@@ -56,6 +56,8 @@ export class UsersComponent {
         message = 'User has been created!';
       } else if (state === 'editedAccount') {
         message = 'Account has been edited!';
+      } else if (state === 'editedPassword') {
+        message = 'Password has been edited!';
       }
 
       this.flashMessagesService.showMessage(message);
