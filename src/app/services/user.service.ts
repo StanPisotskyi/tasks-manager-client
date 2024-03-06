@@ -147,8 +147,6 @@ export class UserService {
     );
   }
 
-
-
   public updatePasswordById (id: number, password: string, confirm: string): Observable<Default>|null {
     const jwt = this.storage.getJwt();
 
@@ -166,6 +164,23 @@ export class UserService {
         password,
         confirm
       },
+      httpOptions
+    );
+  }
+
+  public delete (id: number): Observable<Default>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.delete<Default>(
+      `${environment.apiUrl}/users/${id}`,
       httpOptions
     );
   }

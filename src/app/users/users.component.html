@@ -45,7 +45,7 @@
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let user">
             <a mat-raised-button [routerLink]="['/admin/users', user.id, 'edit']">Edit</a>
-            <button class="ml-5" mat-raised-button color="warn">Delete</button>
+            <button class="ml-5" mat-raised-button color="warn" (click)="confirmDelete(user.id)">Delete</button>
           </td>
         </ng-container>
 

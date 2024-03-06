@@ -14,6 +14,9 @@ import {
 import {RouterLink} from "@angular/router";
 import {UserFormStateService} from "../helpers/user-form-state.service";
 import {FlashMessagesService} from "../helpers/flash-messages.service";
+import {UserDeleteStateService} from "../helpers/user-delete-state.service";
+import {MatDialog} from "@angular/material/dialog";
+import {UserDeleteModalComponent} from "../user-delete-modal/user-delete-modal.component";
 
 @Component({
   selector: 'app-users',
@@ -39,11 +42,14 @@ import {FlashMessagesService} from "../helpers/flash-messages.service";
 export class UsersComponent {
   users: User[] = [];
   displayedColumns: string[] = ['id', 'firstName', 'lastName', 'username', 'email', 'role', 'actions'];
+  private deletedIds: number[] = [];
 
   constructor(
     private userService: UserService,
     private userFormState: UserFormStateService,
-    private flashMessagesService: FlashMessagesService
+    private flashMessagesService: FlashMessagesService,
+    private userDeleteState: UserDeleteStateService,
+    private dialog: MatDialog
   ) {
     this.userFormState.state$.subscribe(state => {
       if (state === null) {
@@ -72,5 +78,22 @@ export class UsersComponent {
         }
       }
     );
+  }
+
+  ngDoCheck() {
+    this.userDeleteState.id$.subscribe(id => {
+      if (!this.deletedIds.includes(id)) {
+        this.deletedIds.push(id);
+        this.users = this.users.filter(user => user.id !== id);
+        this.flashMessagesService.showMessage('User has been deleted!');
+      }
+    });
+  }
+
+  confirmDelete(id: number) {
+    this.dialog.open(UserDeleteModalComponent, {
+      width: '250px',
+      data: { id }
+    });
   }
 }
