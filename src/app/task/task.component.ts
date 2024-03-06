@@ -10,6 +10,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {TaskDeleteModalComponent} from "../task-delete-modal/task-delete-modal.component";
 import {CommentsService} from "../services/comments.service";
 import {Comment} from "../interfaces/comment";
+import {StorageService} from "../services/storage.service";
+import {NgIf} from "@angular/common";
+import {CommentsComponent} from "../comments/comments.component";
 
 @Component({
   selector: 'app-task',
@@ -22,7 +25,9 @@ import {Comment} from "../interfaces/comment";
     MatCardTitle,
     MatAnchor,
     RouterLink,
-    MatButton
+    MatButton,
+    NgIf,
+    CommentsComponent
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
@@ -37,7 +42,8 @@ export class TaskComponent {
     private tasksService: TasksService,
     private dateService: DateService,
     private dialog: MatDialog,
-    private commentsService: CommentsService
+    private commentsService: CommentsService,
+    private storage: StorageService
   ) {
     const id: string|null = this.route.snapshot.paramMap.get('id');
 
@@ -102,11 +108,15 @@ export class TaskComponent {
       let fullName = 'deleted';
       const assignedTo = comments[i].createdBy;
 
+      let isAuthor: boolean = false;
+
       if (assignedTo !== null) {
         fullName = assignedTo.firstName + ' ' + assignedTo.lastName;
+        isAuthor = assignedTo.id === this.storage.getCurrentUser()?.id;
       }
 
       comments[i].fullName = fullName;
+      comments[i].isAuthor = isAuthor;
 
       const children: Comment[]|null = comments[i].children;
 

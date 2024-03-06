@@ -1,0 +1,7 @@
+<span class="comment-text">{{comment?.text}}</span>
+<span *ngIf="comment?.isAuthor === true">
+  <mat-icon class="comment-action ml-5">edit</mat-icon>
+  <mat-icon class="comment-action" color="warn">delete</mat-icon>
+</span>
+<br>
+<span class="comment-info">Created by: {{comment?.fullName}} | Updated at: {{comment?.formattedDate}}</span>

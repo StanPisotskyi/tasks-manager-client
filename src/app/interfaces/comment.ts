@@ -9,5 +9,6 @@ export interface Comment {
   replyId: number|null,
   children: Comment[]|null,
   formattedDate: string|null,
-  fullName: string
+  fullName: string,
+  isAuthor: boolean
 }
