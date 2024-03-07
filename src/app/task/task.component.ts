@@ -8,11 +8,9 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} f
 import {MatAnchor, MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {TaskDeleteModalComponent} from "../task-delete-modal/task-delete-modal.component";
-import {CommentsService} from "../services/comments.service";
-import {Comment} from "../interfaces/comment";
-import {StorageService} from "../services/storage.service";
 import {NgIf} from "@angular/common";
 import {CommentsComponent} from "../comments/comments.component";
+import {CommentFormModalComponent} from "../comment-form-modal/comment-form-modal.component";
 
 @Component({
   selector: 'app-task',
@@ -35,15 +33,12 @@ import {CommentsComponent} from "../comments/comments.component";
 export class TaskComponent {
   id: number = 0;
   task: Task|null = null;
-  comments: Comment[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private tasksService: TasksService,
     private dateService: DateService,
-    private dialog: MatDialog,
-    private commentsService: CommentsService,
-    private storage: StorageService
+    private dialog: MatDialog
   ) {
     const id: string|null = this.route.snapshot.paramMap.get('id');
 
@@ -80,14 +75,6 @@ export class TaskComponent {
         }
       }
     );
-
-    this.commentsService.getAllByTaskId(this.id)?.subscribe(
-      {
-        next: comments => {
-          this.comments = this.prepareComments(comments);
-        }
-      }
-    );
   }
 
   confirmDelete() {
@@ -97,34 +84,11 @@ export class TaskComponent {
     });
   }
 
-  private prepareComments(comments: Comment[]): Comment[] {
-    for (let i = 0; i < comments.length; i++) {
-      let dateToFormat: string|null = comments[i].updatedAt === null ? comments[i].createdAt : comments[i].updatedAt;
-
-      if (dateToFormat !== null) {
-        comments[i].formattedDate = this.dateService.format(dateToFormat);
-      }
-
-      let fullName = 'deleted';
-      const assignedTo = comments[i].createdBy;
-
-      let isAuthor: boolean = false;
-
-      if (assignedTo !== null) {
-        fullName = assignedTo.firstName + ' ' + assignedTo.lastName;
-        isAuthor = assignedTo.id === this.storage.getCurrentUser()?.id;
-      }
-
-      comments[i].fullName = fullName;
-      comments[i].isAuthor = isAuthor;
-
-      const children: Comment[]|null = comments[i].children;
-
-      if (children !== null) {
-        this.prepareComments(children);
-      }
-    }
-
-    return comments;
+  showCommentForm() {
+    this.dialog.open(CommentFormModalComponent, {
+      width: '700px',
+      height: '500px',
+      data: {comment: null, reply: null, taskId: this.id}
+    });
   }
 }

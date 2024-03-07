@@ -13,8 +13,10 @@ import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {CommentComponent} from "../comment/comment.component";
-import {MatDialog} from "@angular/material/dialog";
-import {CommentFormModalComponent} from "../comment-form-modal/comment-form-modal.component";
+import {StorageService} from "../services/storage.service";
+import {CommentFormStateService} from "../helpers/comment-form-state.service";
+import {CommentsService} from "../services/comments.service";
+import {DateService} from "../helpers/date.service";
 
 @Component({
   selector: 'app-comments',
@@ -35,10 +37,17 @@ import {CommentFormModalComponent} from "../comment-form-modal/comment-form-moda
   styleUrl: './comments.component.css'
 })
 export class CommentsComponent {
-  @Input() comments: Comment[] = [];
   @Input() taskId: number = 0;
+  comments: Comment[] = [];
 
-  constructor(private dialog: MatDialog) {
+  private finishedActions: string[] = [];
+
+  constructor(
+    private storage: StorageService,
+    private commentsFormState: CommentFormStateService,
+    private commentsService: CommentsService,
+    private dateService: DateService
+  ) {
   }
 
   private _transformer = (node: Comment, level: number) => {
@@ -69,16 +78,65 @@ export class CommentsComponent {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   ngOnInit() {
-    this.dataSource.data = this.comments;
+    this.commentsService.getAllByTaskId(this.taskId)?.subscribe(
+      {
+        next: comments => {
+          this.comments = this.prepareComments(comments);
+          this.dataSource.data = this.comments;
+        }
+      }
+    );
+  }
+
+  ngDoCheck() {
+    this.commentsFormState.data$.subscribe(commentState => {
+      if (!this.finishedActions.includes(commentState.token)) {
+        this.finishedActions.push(commentState.token);
+
+        if (commentState.comment !== null && commentState.state === 'created') {
+          this.comments.push(this.prepareComment(commentState.comment));
+          this.dataSource.data = this.comments;
+        }
+      }
+    });
   }
 
   hasChild = (_: number, node: CommentNode) => node.expandable;
 
-  showCommentForm() {
-    this.dialog.open(CommentFormModalComponent, {
-      width: '700px',
-      height: '500px',
-      data: {comment: null, reply: null, taskId: this.taskId}
-    });
+  private prepareComments(comments: Comment[]): Comment[] {
+    for (let i = 0; i < comments.length; i++) {
+      comments[i] = this.prepareComment(comments[i]);
+
+      const children: Comment[]|null = comments[i].children;
+
+      if (children !== null) {
+        this.prepareComments(children);
+      }
+    }
+
+    return comments;
+  }
+
+  private prepareComment(comment: Comment): Comment {
+    let dateToFormat: string|null = comment.updatedAt === null ? comment.createdAt : comment.updatedAt;
+
+    if (dateToFormat !== null) {
+      comment.formattedDate = this.dateService.format(dateToFormat);
+    }
+
+    let fullName = 'deleted';
+    const assignedTo = comment.createdBy;
+
+    let isAuthor: boolean = false;
+
+    if (assignedTo !== null) {
+      fullName = assignedTo.firstName + ' ' + assignedTo.lastName;
+      isAuthor = assignedTo.id === this.storage.getCurrentUser()?.id;
+    }
+
+    comment.fullName = fullName;
+    comment.isAuthor = isAuthor;
+
+    return comment;
   }
 }

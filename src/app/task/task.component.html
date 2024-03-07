@@ -21,13 +21,20 @@
   </div>
 </div>
 
-<div class="container" *ngIf="comments.length > 0">
+<div class="container">
   <div class="row">
     <div class="col-12">
+      <span class="pointer action" (click)="showCommentForm()">Create comment</span>
+    </div>
+  </div>
+</div>
+
+<div class="container mb-3">
+  <div class="row">
+    <div class="col-12">
+      <hr>
       <h2>Comments:</h2>
-      <app-comments
-        [taskId]="id"
-        [comments]="comments"></app-comments>
+      <app-comments [taskId]="id"></app-comments>
     </div>
   </div>
 </div>

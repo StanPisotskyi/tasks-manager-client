@@ -1,7 +1,5 @@
-<span class="comment-text">{{comment?.text}}</span>
-<br>
-<span class="comment-info">Created by: {{comment?.fullName}} | Updated at: {{comment?.formattedDate}}</span>
-<br>
+<div class="comment-text" [innerHTML]="comment?.text"></div>
+<div class="comment-info">Created by: {{comment?.fullName}} | Updated at: {{comment?.formattedDate}}</div>
 <span class="comment-action">
   <span class="pointer" (click)="showCommentForm(null, comment === null ? null : comment.id)">Reply</span>
 </span>
