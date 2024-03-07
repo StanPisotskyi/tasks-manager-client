@@ -1,6 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {CommentNode} from "../interfaces/comment-node";
 import {NgIf} from "@angular/common";
+import {MatDialog} from "@angular/material/dialog";
+import {CommentFormModalComponent} from "../comment-form-modal/comment-form-modal.component";
 
 @Component({
   selector: 'app-comment',
@@ -13,4 +15,15 @@ import {NgIf} from "@angular/common";
 })
 export class CommentComponent {
   @Input() comment: CommentNode|null = null;
+
+  constructor(private dialog: MatDialog) {
+  }
+
+  showCommentForm(comment: CommentNode|null, reply: number|null) {
+    this.dialog.open(CommentFormModalComponent, {
+      width: '700px',
+      height: '500px',
+      data: { comment, reply, taskId: null }
+    });
+  }
 }

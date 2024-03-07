@@ -3,9 +3,9 @@
 <span class="comment-info">Created by: {{comment?.fullName}} | Updated at: {{comment?.formattedDate}}</span>
 <br>
 <span class="comment-action">
-  <span class="pointer">Reply</span>
+  <span class="pointer" (click)="showCommentForm(null, comment === null ? null : comment.id)">Reply</span>
 </span>
 <span class="comment-action" *ngIf="comment?.isAuthor === true">
-   | <span class="pointer">Edit</span>
+   | <span class="pointer" (click)="showCommentForm(comment, null)">Edit</span>
    | <span class="pointer">Delete</span>
 </span>

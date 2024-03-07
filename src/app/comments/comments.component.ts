@@ -13,6 +13,8 @@ import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {CommentComponent} from "../comment/comment.component";
+import {MatDialog} from "@angular/material/dialog";
+import {CommentFormModalComponent} from "../comment-form-modal/comment-form-modal.component";
 
 @Component({
   selector: 'app-comments',
@@ -34,6 +36,10 @@ import {CommentComponent} from "../comment/comment.component";
 })
 export class CommentsComponent {
   @Input() comments: Comment[] = [];
+  @Input() taskId: number = 0;
+
+  constructor(private dialog: MatDialog) {
+  }
 
   private _transformer = (node: Comment, level: number) => {
     return {
@@ -67,4 +73,12 @@ export class CommentsComponent {
   }
 
   hasChild = (_: number, node: CommentNode) => node.expandable;
+
+  showCommentForm() {
+    this.dialog.open(CommentFormModalComponent, {
+      width: '700px',
+      height: '500px',
+      data: {comment: null, reply: null, taskId: this.taskId}
+    });
+  }
 }

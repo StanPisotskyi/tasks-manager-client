@@ -25,7 +25,9 @@
   <div class="row">
     <div class="col-12">
       <h2>Comments:</h2>
-      <app-comments [comments]="comments"></app-comments>
+      <app-comments
+        [taskId]="id"
+        [comments]="comments"></app-comments>
     </div>
   </div>
 </div>
