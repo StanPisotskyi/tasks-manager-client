@@ -7,4 +7,5 @@ export interface CommentNode {
   formattedDate: string|null;
   fullName: string;
   isAuthor: boolean;
+  fullPath: string|null;
 }

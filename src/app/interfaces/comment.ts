@@ -10,5 +10,6 @@ export interface Comment {
   children: Comment[]|null,
   formattedDate: string|null,
   fullName: string,
-  isAuthor: boolean
+  isAuthor: boolean,
+  fullPath: string|null
 }

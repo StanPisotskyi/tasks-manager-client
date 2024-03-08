@@ -59,7 +59,8 @@ export class CommentsComponent {
       replyId: node.replyId,
       formattedDate: node.formattedDate,
       fullName: node.fullName,
-      isAuthor: node.isAuthor
+      isAuthor: node.isAuthor,
+      fullPath: node.fullPath
     };
   };
 
@@ -81,7 +82,7 @@ export class CommentsComponent {
     this.commentsService.getAllByTaskId(this.taskId)?.subscribe(
       {
         next: comments => {
-          this.comments = this.prepareComments(comments);
+          this.comments = this.prepareComments(comments, '');
           this.dataSource.data = this.comments;
         }
       }
@@ -93,8 +94,34 @@ export class CommentsComponent {
       if (!this.finishedActions.includes(commentState.token)) {
         this.finishedActions.push(commentState.token);
 
-        if (commentState.comment !== null && commentState.state === 'created') {
-          this.comments.push(this.prepareComment(commentState.comment));
+        if (commentState.comment !== null) {
+          let preparedComment = this.prepareComment(commentState.comment);
+
+          if (commentState.state === 'created') {
+            preparedComment.fullPath = '' + this.comments.length;
+            this.comments.push(preparedComment);
+          } else if (commentState.state === 'edited') {
+            const indexes = commentState.fullPath.split('-');
+
+            let objectToUpdate: Comment|null = null;
+
+            for (let i = 0; i < indexes.length; i++) {
+              const currentIndex: number = parseInt(indexes[i]);
+
+
+              if (objectToUpdate !== null && objectToUpdate.hasOwnProperty('children') && objectToUpdate.children !== null) {
+                objectToUpdate = objectToUpdate.children[currentIndex];
+              } else {
+                objectToUpdate = this.comments[currentIndex];
+              }
+            }
+
+            if (objectToUpdate !== null) {
+              objectToUpdate.text = preparedComment.text;
+              objectToUpdate.formattedDate = preparedComment.formattedDate;
+            }
+          }
+
           this.dataSource.data = this.comments;
         }
       }
@@ -103,14 +130,24 @@ export class CommentsComponent {
 
   hasChild = (_: number, node: CommentNode) => node.expandable;
 
-  private prepareComments(comments: Comment[]): Comment[] {
+  private prepareComments(comments: Comment[], fullPath: string): Comment[] {
     for (let i = 0; i < comments.length; i++) {
       comments[i] = this.prepareComment(comments[i]);
 
       const children: Comment[]|null = comments[i].children;
 
+      let separator: string = '';
+
+      if (fullPath !== '') {
+        separator = '-';
+      }
+
+      const currentFullPath = fullPath + separator + i;
+
+      comments[i].fullPath = currentFullPath;
+
       if (children !== null) {
-        this.prepareComments(children);
+        this.prepareComments(children, currentFullPath);
       }
     }
 
