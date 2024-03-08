@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Comment} from "../interfaces/comment";
 import {environment} from "../../environments/environment";
+import {Default} from "../interfaces/default";
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,23 @@ export class CommentsService {
       {
         text
       },
+      httpOptions
+    );
+  }
+
+  public delete(id: number): Observable<Default>|null {
+    const jwt = this.storage.getJwt();
+
+    if (jwt === null) {
+      return null;
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + jwt })
+    };
+
+    return this.http.delete<Default>(
+      `${environment.apiUrl}/comments/${id}`,
       httpOptions
     );
   }
