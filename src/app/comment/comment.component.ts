@@ -19,11 +19,11 @@ export class CommentComponent {
   constructor(private dialog: MatDialog) {
   }
 
-  showCommentForm(comment: CommentNode|null, reply: number|null) {
+  showCommentForm(comment: CommentNode|null, reply: number|null, fullPath: string|null) {
     this.dialog.open(CommentFormModalComponent, {
       width: '700px',
       height: '500px',
-      data: { comment, reply, taskId: null }
+      data: { comment, reply, taskId: null, fullPath }
     });
   }
 }

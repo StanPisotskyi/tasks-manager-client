@@ -108,7 +108,6 @@ export class CommentsComponent {
             for (let i = 0; i < indexes.length; i++) {
               const currentIndex: number = parseInt(indexes[i]);
 
-
               if (objectToUpdate !== null && objectToUpdate.hasOwnProperty('children') && objectToUpdate.children !== null) {
                 objectToUpdate = objectToUpdate.children[currentIndex];
               } else {
@@ -119,6 +118,30 @@ export class CommentsComponent {
             if (objectToUpdate !== null) {
               objectToUpdate.text = preparedComment.text;
               objectToUpdate.formattedDate = preparedComment.formattedDate;
+            }
+          } else if (commentState.state === 'replied') {
+            const indexes = commentState.fullPath.split('-');
+
+            let parent: Comment|null = null;
+
+            for (let i = 0; i < indexes.length; i++) {
+              const currentIndex: number = parseInt(indexes[i]);
+
+              if (parent !== null && parent.hasOwnProperty('children') && parent.children !== null) {
+                parent = parent.children[currentIndex];
+              } else {
+                parent = this.comments[currentIndex];
+              }
+            }
+
+            if (parent !== null) {
+              if (parent.children === null) {
+                parent.children = [];
+              }
+
+              preparedComment.fullPath = commentState.fullPath + '-' + parent.children.length;
+
+              parent.children.push(preparedComment);
             }
           }
 

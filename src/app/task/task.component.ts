@@ -88,7 +88,7 @@ export class TaskComponent {
     this.dialog.open(CommentFormModalComponent, {
       width: '700px',
       height: '500px',
-      data: {comment: null, reply: null, taskId: this.id}
+      data: {comment: null, reply: null, taskId: this.id, fullPath: null}
     });
   }
 }

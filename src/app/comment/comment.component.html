@@ -1,9 +1,9 @@
 <div class="comment-text" [innerHTML]="comment?.text"></div>
 <div class="comment-info">Created by: {{comment?.fullName}} | Updated at: {{comment?.formattedDate}}</div>
 <span class="comment-action">
-  <span class="pointer" (click)="showCommentForm(null, comment === null ? null : comment.id)">Reply</span>
+  <span class="pointer" (click)="showCommentForm(null, comment === null ? null : comment.id, comment === null ? null : comment.fullPath)">Reply</span>
 </span>
 <span class="comment-action" *ngIf="comment?.isAuthor === true">
-   | <span class="pointer" (click)="showCommentForm(comment, null)">Edit</span>
+   | <span class="pointer" (click)="showCommentForm(comment, null, comment === null ? null : comment.fullPath)">Edit</span>
    | <span class="pointer">Delete</span>
 </span>

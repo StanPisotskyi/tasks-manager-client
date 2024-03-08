@@ -84,17 +84,11 @@ export class CommentFormModalComponent {
       observable?.subscribe(
         {
           next: comment => {
-            let fullPath = null;
-
-            if (this.data.comment !== null) {
-              fullPath = this.data.comment.fullPath;
-            }
-
             const commentState: CommentState = {
               comment: comment,
               state: state,
               token: '' + new Date().getTime() + this.storage.getCurrentUser()?.id + comment.id,
-              fullPath: fullPath
+              fullPath: this.data.fullPath
             };
 
             this.commentsFormState.setData(commentState);
