@@ -3,6 +3,7 @@ import {CommentNode} from "../interfaces/comment-node";
 import {NgIf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {CommentFormModalComponent} from "../comment-form-modal/comment-form-modal.component";
+import {CommentDeleteModalComponent} from "../comment-delete-modal/comment-delete-modal.component";
 
 @Component({
   selector: 'app-comment',
@@ -24,6 +25,13 @@ export class CommentComponent {
       width: '700px',
       height: '500px',
       data: { comment, reply, taskId: null, fullPath }
+    });
+  }
+
+  confirmDelete(comment: CommentNode|null) {
+    this.dialog.open(CommentDeleteModalComponent, {
+      width: '250px',
+      data: { comment }
     });
   }
 }

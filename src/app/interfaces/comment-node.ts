@@ -8,4 +8,5 @@ export interface CommentNode {
   fullName: string;
   isAuthor: boolean;
   fullPath: string|null;
+  isDeleted: boolean;
 }

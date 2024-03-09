@@ -60,7 +60,8 @@ export class CommentsComponent {
       formattedDate: node.formattedDate,
       fullName: node.fullName,
       isAuthor: node.isAuthor,
-      fullPath: node.fullPath
+      fullPath: node.fullPath,
+      isDeleted: node.isDeleted
     };
   };
 
@@ -101,19 +102,7 @@ export class CommentsComponent {
             preparedComment.fullPath = '' + this.comments.length;
             this.comments.push(preparedComment);
           } else if (commentState.state === 'edited') {
-            const indexes = commentState.fullPath.split('-');
-
-            let objectToUpdate: Comment|null = null;
-
-            for (let i = 0; i < indexes.length; i++) {
-              const currentIndex: number = parseInt(indexes[i]);
-
-              if (objectToUpdate !== null && objectToUpdate.hasOwnProperty('children') && objectToUpdate.children !== null) {
-                objectToUpdate = objectToUpdate.children[currentIndex];
-              } else {
-                objectToUpdate = this.comments[currentIndex];
-              }
-            }
+            let objectToUpdate: Comment|null = this.getObjectToUpdate(commentState.fullPath);
 
             if (objectToUpdate !== null) {
               objectToUpdate.text = preparedComment.text;
@@ -145,8 +134,17 @@ export class CommentsComponent {
             }
           }
 
-          this.dataSource.data = this.comments;
+        } else {
+          if (commentState.state === 'deleted') {
+            let objectToDelete: Comment|null = this.getObjectToUpdate(commentState.fullPath);
+
+            if (objectToDelete !== null) {
+              this.deleteComments(objectToDelete);
+            }
+          }
         }
+
+        this.dataSource.data = this.comments;
       }
     });
   }
@@ -196,7 +194,39 @@ export class CommentsComponent {
 
     comment.fullName = fullName;
     comment.isAuthor = isAuthor;
+    comment.isDeleted = false;
 
     return comment;
+  }
+
+  private getObjectToUpdate(fullPath: string): Comment|null {
+    const indexes = fullPath.split('-');
+
+    let objectToUpdate: Comment|null = null;
+
+    for (let i = 0; i < indexes.length; i++) {
+      const currentIndex: number = parseInt(indexes[i]);
+
+      if (objectToUpdate !== null && objectToUpdate.hasOwnProperty('children') && objectToUpdate.children !== null) {
+        objectToUpdate = objectToUpdate.children[currentIndex];
+      } else {
+        objectToUpdate = this.comments[currentIndex];
+      }
+    }
+
+    return objectToUpdate;
+  }
+
+  private deleteComments(comment: Comment) {
+    comment.text = 'deleted';
+    comment.isDeleted = true;
+
+    if (comment.children === null) {
+      return;
+    }
+
+    for (let i = 0; i < comment.children.length; i++) {
+      this.deleteComments(comment.children[i]);
+    }
   }
 }

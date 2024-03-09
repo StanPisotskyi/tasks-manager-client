@@ -11,5 +11,6 @@ export interface Comment {
   formattedDate: string|null,
   fullName: string,
   isAuthor: boolean,
-  fullPath: string|null
+  fullPath: string|null,
+  isDeleted: boolean
 }
