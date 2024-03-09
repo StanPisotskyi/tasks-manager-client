@@ -1,0 +1,13 @@
+services:
+  client:
+    container_name: tasks-manager-client
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - tasks-manager
+
+networks:
+  tasks-manager:
+    external: true
